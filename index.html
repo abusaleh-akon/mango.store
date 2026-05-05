@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MangoKing - Premium Magical Store</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500;700;800;900&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* MAGICAL MANGO CURSOR */
+    html, body {
+      font-family: "Hind Siliguri", sans-serif;
+      background: #fdf5e0;
+      color: #3a1505;
+      scroll-snap-type: y mandatory;
+      overflow-y: scroll;
+      height: 100vh;
+      scroll-behavior: smooth;
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 64 64"><path fill="%23f4a909" stroke="%233d1805" stroke-width="2" d="M32 60c-15.5 0-28-12.5-28-28 0-15.5 12.5-28 28-28 15.5 0 28 12.5 28 28 0 15.5-12.5 28-28 28z"/></svg>') 14 14, auto;
+    }
+
+    ::-webkit-scrollbar { width: 0; }
+
+    .snap-section {
+      scroll-snap-align: start;
+      height: 100vh;
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    /* GLASSMORPHISM HEADER */
+    header {
+      height: 90px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 70px;
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      z-index: 50;
+      transition: all 0.3s ease;
+    }
+
+    header:active, header:hover {
+      background: rgba(255, 255, 255, 0.4);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .logo {
+      font-family: "Poppins", sans-serif;
+      font-size: 38px;
+      font-weight: 800;
+      color: #fff;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+
+    .logo span { color: #ffe600; }
+
+    nav { display: flex; gap: 52px; font-size: 22px; font-weight: 800; }
+    nav a { color: #fff; text-decoration: none; text-shadow: 0 2px 8px rgba(0,0,0,0.3); transition: 0.3s; }
+    nav a:hover { color: #ffe600; }
+
+    /* FALLING LEAVES ANIMATION */
+    #leaves-container {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      overflow: hidden;
+    }
+
+    .falling-leaf {
+      position: absolute;
+      top: -150px;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 300"><path fill="%232e7d32" d="M50 10 C 90 80 80 230 50 290 C 20 230 10 80 50 10 Z"/><path stroke="%231b5e20" stroke-width="4" fill="none" d="M50 10 Q 50 150 50 290"/></svg>') no-repeat center/contain;
+      opacity: 0.7;
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-150px) rotate(-15deg) translateX(0); opacity: 0; }
+      10% { opacity: 0.9; }
+      90% { opacity: 0.9; }
+      100% { transform: translateY(110vh) rotate(45deg) translateX(200px); opacity: 0; }
+    }
+
+    /* HERO SECTION */
+    .hero {
+      background: url("sharp_bg.png") center/cover no-repeat;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 25% 25%, rgba(255,255,255,.35), transparent 45%),
+                  linear-gradient(90deg, rgba(255,206,52,.85), rgba(0,0,0,.15));
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: absolute;
+      top: 90px; 
+      bottom: 0; left: 0; right: 0;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      padding: 0 65px;
+    }
+
+    .text-box {
+      max-width: 760px;
+      margin-top: 50px;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 1s ease-out;
+    }
+
+    .text-box.visible { opacity: 1; transform: translateY(0); }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.85);
+      padding: 8px 16px;
+      border-radius: 40px;
+      font-size: 18px;
+      font-weight: 800;
+      color: #552700;
+      margin-bottom: 25px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      font-size: clamp(58px, 7vw, 108px);
+      line-height: 1.02;
+      font-weight: 900;
+      letter-spacing: -2px;
+      color: #431700;
+      text-shadow: 0 8px 15px rgba(0,0,0,.18);
+      margin-bottom: 30px;
+    }
+
+    h1 span {
+      display: block;
+      color: #fff;
+      text-shadow: 0 8px 18px rgba(0,0,0,.3);
+    }
+
+    .desc {
+      font-size: 27px;
+      line-height: 1.55;
+      font-weight: 800;
+      color: #3d1805;
+      max-width: 690px;
+      text-shadow: 0 2px 8px rgba(255,255,255,.5);
+    }
+
+    .swipe-indicator {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 22px;
+      font-weight: 900;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      z-index: 20;
+      animation: bounce 2s infinite;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translate(-50%, 0); }
+      50% { transform: translate(-50%, 15px); }
+    }
+
+    .bottom-wave {
+      position: absolute;
+      left: 0; bottom: -2px; width: 100%; height: 180px;
+      background: linear-gradient(180deg, transparent, #fffdf8);
+      z-index: 6;
+    }
+
+    /* SECOND PAGE: MANGO COLLECTION SECTION */
+    .mango-page {
+      background: #fffdf8;
+      background-image: radial-gradient(#ffdf80 1px, transparent 1px);
+      background-size: 40px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding-top: 50px;
+    }
+
+    .section-title {
+      font-size: 55px;
+      font-weight: 900;
+      color: #3d1805;
+      margin-bottom: 80px;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 1s ease-out;
+    }
+
+    .section-title.visible { opacity: 1; transform: translateY(0); }
+    .section-title span { color: #e06000; }
+
+    .cartoon-row {
+      display: flex;
+      gap: 120px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .cartoon-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      opacity: 0;
+      transform: translateY(60px);
+      transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .cartoon-item.visible { opacity: 1; transform: translateY(0); }
+    .cartoon-item:nth-child(1) { transition-delay: 0.2s; }
+    .cartoon-item:nth-child(2) { transition-delay: 0.4s; }
+    .cartoon-item:nth-child(3) { transition-delay: 0.6s; }
+
+    .cartoon-item img {
+      width: 250px;
+      height: 250px;
+      object-fit: contain;
+      mix-blend-mode: multiply;
+      cursor: pointer;
+      transform-origin: bottom center;
+      z-index: 5;
+    }
+
+    .cartoon-item img:hover, .cartoon-item img:active {
+      animation: dance 0.6s ease-in-out infinite alternate;
+    }
+
+    @keyframes dance {
+      0% { transform: scale(1) translateY(0) rotate(0deg); }
+      33% { transform: scale(1.1, 0.9) translateY(10px) rotate(-10deg); }
+      66% { transform: scale(0.9, 1.1) translateY(-15px) rotate(10deg); }
+      100% { transform: scale(1.05, 0.95) translateY(0) rotate(-5deg); }
+    }
+
+    .shadow-oval {
+      width: 140px;
+      height: 18px;
+      background: rgba(0,0,0,0.12);
+      border-radius: 50%;
+      margin-top: -30px;
+      filter: blur(4px);
+      margin-bottom: 40px; 
+    }
+
+    /* HANGING NAME TAG */
+    .name-tag-wrapper {
+      position: absolute;
+      top: 20px; 
+      left: 65%; 
+      transform-origin: top center;
+      animation: swingTag 4s ease-in-out infinite alternate;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      pointer-events: none;
+    }
+    
+    .cartoon-item:nth-child(even) .name-tag-wrapper {
+      animation: swingTag 5s ease-in-out infinite alternate-reverse;
+    }
+
+    .string {
+      width: 4px;
+      height: 60px; 
+      background: linear-gradient(180deg, #d32f2f, #b71c1c); 
+      box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+      border-radius: 2px;
+    }
+
+    .name-tag {
+      background: #fffdf5;
+      padding: 6px 20px;
+      border-radius: 8px;
+      border: 2px solid #d32f2f; 
+      font-size: 18px;
+      font-weight: 900;
+      color: #3d1805;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.25);
+      margin-top: -5px; 
+      position: relative;
+    }
+
+    .name-tag::before {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 6px; height: 6px;
+      background: #d32f2f;
+      border-radius: 50%;
+    }
+
+    @keyframes swingTag {
+      0% { transform: rotate(-10deg); }
+      100% { transform: rotate(10deg); }
+    }
+
+    .order-btn {
+      background: linear-gradient(90deg, #4a1604, #661f06);
+      color: #ffd431;
+      padding: 16px 35px;
+      border-radius: 50px;
+      font-family: inherit;
+      font-size: 20px;
+      font-weight: 800;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 12px 25px rgba(74, 22, 4, 0.3);
+      transition: .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      margin-top: 15px; 
+      z-index: 10;
+    }
+
+    .order-btn:hover {
+      transform: translateY(-8px) scale(1.05);
+      box-shadow: 0 18px 35px rgba(74, 22, 4, 0.4);
+    }
+
+    /* THIRD PAGE: OUR STORY (PARALLAX) */
+    .story-page {
+      background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.85)), url('sharp_bg.png') center/cover no-repeat fixed; /* PARALLAX FIX */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0 40px;
+      color: #fff;
+    }
+
+    .story-content {
+      max-width: 900px;
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all 1s ease-out;
+    }
+
+    .story-content.visible { opacity: 1; transform: translateY(0); }
+
+    .story-content h2 {
+      font-size: 60px;
+      font-weight: 900;
+      margin-bottom: 30px;
+      text-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    }
+
+    .story-content h2 span { color: #f4a909; }
+
+    .story-content p {
+      font-size: 26px;
+      line-height: 1.7;
+      margin-bottom: 50px;
+      color: #f1f1f1;
+    }
+
+    .story-badges {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .s-badge {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      padding: 15px 30px;
+      border-radius: 50px;
+      border: 1px solid rgba(255,255,255,0.2);
+      font-size: 20px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: 0.3s;
+      cursor: default;
+    }
+
+    .s-badge:hover {
+      background: rgba(244,169,9,0.3);
+      transform: translateY(-5px);
+    }
+
+    /* DYNAMIC CHECKOUT MODAL */
+    .checkout-modal {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.4s ease;
+    }
+
+    .checkout-modal.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal-content {
+      width: 90%;
+      max-width: 900px;
+      height: 85vh;
+      background: #fff;
+      border-radius: 30px;
+      overflow: hidden;
+      display: flex;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+      transform: translateY(50px) scale(0.95);
+      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .checkout-modal.active .modal-content { transform: translateY(0) scale(1); }
+
+    .modal-left {
+      flex: 1;
+      background: url("juicy_mango_bg.png") center/cover no-repeat;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 40px;
+      color: #fff;
+    }
+
+    .modal-left::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(0deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 60%);
+    }
+
+    .modal-left h2 {
+      position: relative;
+      z-index: 2;
+      font-size: 45px;
+      font-weight: 900;
+      margin-bottom: 10px;
+      text-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    }
+    
+    .mango-type-label {
+      position: relative;
+      z-index: 2;
+      font-size: 24px;
+      font-weight: 800;
+      color: #ffd431;
+    }
+
+    .modal-right {
+      flex: 1.2;
+      background: #fffaf0;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 20px; right: 20px;
+      font-size: 35px;
+      cursor: pointer;
+      color: #333;
+      background: #fff;
+      border-radius: 50%;
+      width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+
+    .form-title { font-size: 28px; font-weight: 900; color: #4a1604; margin-bottom: 25px; }
+
+    .package-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 30px; }
+
+    .package-card {
+      background: #fff; border: 2px solid #e0e0e0; border-radius: 15px;
+      padding: 15px 10px; text-align: center; cursor: pointer; transition: all 0.3s ease;
+    }
+
+    .package-card img { width: 50px; height: 50px; object-fit: contain; margin-bottom: 10px; }
+    .package-card h4 { font-size: 22px; font-weight: 900; color: #333; }
+    .package-card.selected {
+      border-color: #f4a909; background: #fffdf5; box-shadow: 0 8px 20px rgba(244, 169, 9, 0.2); transform: scale(1.05);
+    }
+
+    .input-group { margin-bottom: 20px; }
+    .input-group label { display: block; font-size: 16px; font-weight: 700; color: #555; margin-bottom: 8px; }
+    .input-group input, .input-group textarea {
+      width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px;
+      font-family: inherit; font-size: 16px; transition: 0.3s; background: #fff;
+    }
+    .input-group input:focus, .input-group textarea:focus {
+      outline: none; border-color: #f4a909; box-shadow: 0 0 0 4px rgba(244, 169, 9, 0.1);
+    }
+
+    .billing-section {
+      background: #fff; padding: 20px; border-radius: 15px; margin-bottom: 25px; border: 1px dashed #d4a373;
+    }
+    .bill-row { display: flex; justify-content: space-between; font-size: 18px; font-weight: 700; color: #555; margin-bottom: 10px; }
+    .bill-row.total { font-size: 24px; font-weight: 900; color: #d32f2f; border-top: 2px solid #eee; padding-top: 10px; margin-top: 10px; }
+
+    .confirm-btn {
+      background: linear-gradient(90deg, #f4a909, #ff5722); color: #fff; width: 100%; padding: 20px;
+      border: none; border-radius: 12px; font-size: 24px; font-weight: 900; font-family: inherit;
+      cursor: pointer; box-shadow: 0 15px 30px rgba(244, 169, 9, 0.3); transition: 0.3s;
+    }
+    .confirm-btn:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(244, 169, 9, 0.4); }
+
+    .success-overlay {
+      position: absolute; inset: 0; background: #fff; z-index: 50; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: 0.5s;
+    }
+    .success-overlay.active { opacity: 1; pointer-events: all; }
+    .success-icon { font-size: 80px; color: #4caf50; margin-bottom: 20px; }
+
+    /* Floating Admin Link */
+    .admin-link {
+      position: fixed; bottom: 20px; right: 20px; background: rgba(0,0,0,0.8); color: #fff;
+      padding: 10px 20px; border-radius: 30px; text-decoration: none; font-weight: bold; z-index: 100;
+      backdrop-filter: blur(5px); box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+    .admin-link:hover { background: #f4a909; color: #333; }
+
+    @media (max-width: 900px) {
+      .modal-content { flex-direction: column; height: 95vh; overflow-y: auto; }
+      .modal-left { flex: none; height: 250px; }
+      .package-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+      .package-card { padding: 10px 5px; }
+      .package-card h4 { font-size: 18px; }
+      .cartoon-row { gap: 60px; }
+      .story-content h2 { font-size: 40px; }
+      .story-content p { font-size: 18px; }
+    }
+  </style>
+</head>
+
+<body>
+  
+  <div id="leaves-container"></div>
+
+  <!-- HERO SECTION -->
+  <section class="hero snap-section">
+    <header>
+      <div class="logo">Mango<span>King</span></div>
+      <nav>
+        <a href="#">হোম</a>
+        <a href="#">আমাদের সম্পর্কে</a>
+        <a href="#">আমসমূহ</a>
+        <a href="#">যোগাযোগ</a>
+      </nav>
+    </header>
+
+    <div class="hero-content">
+      <div class="text-box reveal-target">
+        <div class="eyebrow">✔ ১০০% রসমালিন মুক্ত</div>
+        <h1>
+          তাজা ও মিষ্টি
+          <span>রাজশাহীর আম</span>
+        </h1>
+
+        <p class="desc">
+          প্রিমিয়াম কোয়ালিটির ১০০% রসমালিন মুক্ত পাকা আম
+          এখন আপনার হাতের মুঠোয়। আজই আপনার পছন্দের
+          আমটি অর্ডার করুন এবং স্বাদ নিন প্রকৃতির আসল মিষ্টির।
+        </p>
+      </div>
+    </div>
+
+    <div class="swipe-indicator">
+      স্ক্রোল করে ম্যাজিক দেখুন
+      <span>▼</span>
+    </div>
+
+    <div class="bottom-wave"></div>
+  </section>
+
+  <!-- SECOND PAGE: MANGO COLLECTION -->
+  <section class="mango-page snap-section">
+    <h2 class="section-title reveal-target">আমাদের <span>আম</span> কালেকশন</h2>
+
+    <div class="cartoon-row">
+      <!-- Item 1: Amrapali -->
+      <div class="cartoon-item reveal-target">
+        <img src="cartoon_amrapali.png" alt="Amrapali">
+        <div class="shadow-oval"></div>
+        <div class="name-tag-wrapper">
+          <div class="string"></div>
+          <div class="name-tag">আম রূপালি</div>
+        </div>
+        <button class="order-btn" onclick="openModal('আম রূপালি', 'cartoon_amrapali.png')">আমাকে অর্ডার করুন</button>
+      </div>
+      
+      <!-- Item 2: Fazli -->
+      <div class="cartoon-item reveal-target">
+        <img src="cartoon_fazli.png" alt="Fazli">
+        <div class="shadow-oval"></div>
+        <div class="name-tag-wrapper">
+          <div class="string"></div>
+          <div class="name-tag">ফজলি</div>
+        </div>
+        <button class="order-btn" onclick="openModal('ফজলি', 'cartoon_fazli.png')">আমাকে অর্ডার করুন</button>
+      </div>
+      
+      <!-- Item 3: Langra -->
+      <div class="cartoon-item reveal-target">
+        <img src="cartoon_langra.png" alt="Langra">
+        <div class="shadow-oval"></div>
+        <div class="name-tag-wrapper">
+          <div class="string"></div>
+          <div class="name-tag">ল্যাংড়া</div>
+        </div>
+        <button class="order-btn" onclick="openModal('ল্যাংড়া', 'cartoon_langra.png')">আমাকে অর্ডার করুন</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- THIRD PAGE: STORY PARALLAX -->
+  <section class="story-page snap-section">
+    <div class="story-content reveal-target">
+      <h2>রাজশাহীর <span>ঐতিহ্য</span></h2>
+      <p>আমাদের প্রতিটি আম আসে সরাসরি রাজশাহীর সেরা বাগানগুলো থেকে। কোনো কেমিক্যাল বা ফরমালিন ছাড়াই সম্পূর্ণ প্রাকৃতিকভাবে পাকানো হয় আমাদের আম। আমরা বিশ্বাস করি গুণগত মানে, তাই আপনার কাছে পৌঁছে দেই প্রকৃতির আসল স্বাদ।</p>
+      <div class="story-badges">
+        <div class="s-badge"><span>🌿</span> ১০০% অর্গানিক</div>
+        <div class="s-badge"><span>🚚</span> দ্রুত ডেলিভারি</div>
+        <div class="s-badge"><span>⭐</span> প্রিমিয়াম কোয়ালিটি</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHECKOUT MODAL -->
+  <div class="checkout-modal" id="checkoutModal">
+    <div class="modal-content">
+      <div class="close-btn" onclick="closeModal()">✕</div>
+      <div class="modal-left">
+        <h2 id="modalMangoName">আম রূপালি</h2>
+        <div class="mango-type-label">তাজা ও রসালো</div>
+      </div>
+      <div class="modal-right">
+        <div class="form-title">অর্ডার কনফার্ম করুন</div>
+        <div class="package-grid">
+          <div class="package-card" onclick="selectPackage(2, this)">
+            <img id="pkgImg2" src="cartoon_amrapali.png" alt="Mango">
+            <h4>২ কেজি</h4>
+          </div>
+          <div class="package-card selected" onclick="selectPackage(5, this)">
+            <img id="pkgImg5" src="cartoon_amrapali.png" alt="Mango">
+            <h4>৫ কেজি</h4>
+          </div>
+          <div class="package-card" onclick="selectPackage(10, this)">
+            <img id="pkgImg10" src="cartoon_amrapali.png" alt="Mango">
+            <h4>১০ কেজি</h4>
+          </div>
+        </div>
+        <div class="input-group">
+          <label>আপনার নাম</label>
+          <input type="text" id="custName" placeholder="মোঃ রহিম..." required>
+        </div>
+        <div class="input-group">
+          <label>মোবাইল নম্বর</label>
+          <input type="tel" id="custPhone" placeholder="017........" required>
+        </div>
+        <div class="input-group">
+          <label>পূর্ণাঙ্গ ঠিকানা</label>
+          <textarea id="custAddress" rows="2" placeholder="বাড়ি নং, রাস্তা, এলাকা..." required></textarea>
+        </div>
+        <div class="billing-section">
+          <div class="bill-row">
+            <span>আমের মূল্য (৩০০ টাকা/কেজি)</span>
+            <span id="calcFormula">৫ কেজি x ৩০০</span>
+          </div>
+          <div class="bill-row">
+            <span>ডেলিভারি চার্জ</span>
+            <span>১০০ টাকা</span>
+          </div>
+          <div class="bill-row total">
+            <span>সর্বমোট বিল</span>
+            <span id="totalBill">১৬০০ টাকা</span>
+          </div>
+        </div>
+        <button class="confirm-btn" onclick="submitOrder()">অর্ডার কনফার্ম করুন</button>
+        <div class="success-overlay" id="successOverlay">
+          <div class="success-icon">✔</div>
+          <h2 style="color: #4caf50; margin-bottom: 10px;">অর্ডার সম্পন্ন হয়েছে!</h2>
+          <p style="color: #666; font-size: 18px; text-align: center;">আপনার অর্ডারটি আমাদের এডমিন ড্যাশবোর্ডে চলে গেছে।<br>খুব জলদি আমরা কল করে কনফার্ম করবো।</p>
+          <button class="btn btn-secondary" style="margin-top: 30px; font-size: 18px;" onclick="closeModal()">বন্ধ করুন</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <a href="admin.html" class="admin-link">⚙️ এডমিন প্যানেল</a>
+
+  <script>
+    // SCROLL REVEAL MAGIC
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.2 });
+    document.querySelectorAll('.reveal-target').forEach(el => observer.observe(el));
+
+    // FALLING LEAVES
+    function spawnLeaf() {
+      const container = document.getElementById('leaves-container');
+      const leaf = document.createElement('div');
+      leaf.classList.add('falling-leaf');
+      leaf.style.left = Math.random() * 100 + 'vw';
+      leaf.style.animationDuration = (Math.random() * 6 + 6) + 's';
+      
+      // Medium sized long mango leaf ratio
+      const width = Math.random() * 15 + 25;
+      leaf.style.width = width + 'px';
+      leaf.style.height = (width * 3) + 'px';
+      leaf.style.transform = `rotate(${Math.random() * 360}deg)`;
+      
+      container.appendChild(leaf);
+      setTimeout(() => leaf.remove(), 12000);
+    }
+    setInterval(spawnLeaf, 1000);
+
+    // CHECKOUT LOGIC
+    let currentMango = '';
+    let currentKg = 5;
+    const pricePerKg = 300;
+    const deliveryCharge = 100;
+    let totalBillAmount = 1600;
+
+    function openModal(mangoName, imgFile) {
+      currentMango = mangoName;
+      document.getElementById('modalMangoName').innerText = mangoName;
+      document.getElementById('pkgImg2').src = imgFile;
+      document.getElementById('pkgImg5').src = imgFile;
+      document.getElementById('pkgImg10').src = imgFile;
+      document.getElementById('successOverlay').classList.remove('active');
+      document.getElementById('custName').value = '';
+      document.getElementById('custPhone').value = '';
+      document.getElementById('custAddress').value = '';
+      selectPackage(5, document.querySelectorAll('.package-card')[1]);
+      document.getElementById('checkoutModal').classList.add('active');
+    }
+
+    function closeModal() { document.getElementById('checkoutModal').classList.remove('active'); }
+
+    function selectPackage(kg, element) {
+      currentKg = kg;
+      document.querySelectorAll('.package-card').forEach(card => card.classList.remove('selected'));
+      element.classList.add('selected');
+      const mangoPrice = kg * pricePerKg;
+      totalBillAmount = mangoPrice + deliveryCharge;
+      
+      const kgStr = kg.toString().replace(/0/g,'০').replace(/1/g,'১').replace(/2/g,'২').replace(/5/g,'৫').replace(/10/g,'১০');
+      document.getElementById('calcFormula').innerText = `${kgStr} কেজি x ৩00`;
+      
+      const totalStr = totalBillAmount.toString().replace(/0/g,'০').replace(/1/g,'১').replace(/2/g,'২').replace(/3/g,'৩').replace(/4/g,'৪').replace(/5/g,'৫').replace(/6/g,'৬').replace(/7/g,'৭').replace(/8/g,'৮').replace(/9/g,'৯');
+      document.getElementById('totalBill').innerText = `${totalStr} টাকা`;
+    }
+
+    function submitOrder() {
+      const name = document.getElementById('custName').value;
+      const phone = document.getElementById('custPhone').value;
+      const address = document.getElementById('custAddress').value;
+
+      if(!name || !phone || !address) {
+        alert("দয়া করে নাম, মোবাইল নম্বর এবং ঠিকানা পূরণ করুন।");
+        return;
+      }
+
+      // SAVE TO LOCALSTORAGE (DATABASE MOCKUP)
+      const newOrder = {
+        id: 'ORD-' + Math.floor(Math.random() * 10000),
+        mango: currentMango,
+        package: currentKg + ' কেজি',
+        price: totalBillAmount + ' টাকা',
+        customer: name,
+        phone: phone,
+        address: address,
+        time: new Date().toLocaleString('bn-BD')
+      };
+
+      let orders = JSON.parse(localStorage.getItem('mangoOrders')) || [];
+      orders.unshift(newOrder); // Add to top
+      localStorage.setItem('mangoOrders', JSON.stringify(orders));
+
+      // Show Success Animation
+      document.getElementById('successOverlay').classList.add('active');
+    }
+  </script>
+</body>
+</html>
