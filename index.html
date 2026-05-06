@@ -13,15 +13,21 @@
     /* MAGICAL MANGO CURSOR */
     html, body {
       font-family: "Hind Siliguri", sans-serif; background: #fdf5e0; color: #3a1505;
-      scroll-snap-type: y mandatory; overflow-x: hidden; scroll-behavior: smooth; height: 100vh;
+      overflow-x: hidden; scroll-behavior: smooth;
       cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 64 64"><path fill="%23f4a909" stroke="%233d1805" stroke-width="2" d="M32 60c-15.5 0-28-12.5-28-28 0-15.5 12.5-28 28-28 15.5 0 28 12.5 28 28 0 15.5-12.5 28-28 28z"/></svg>') 14 14, auto;
     }
 
     ::-webkit-scrollbar { width: 0; display: none; }
 
-    .snap-section {
-      scroll-snap-align: start; min-height: 100vh; position: relative; width: 100%; display: flex; flex-direction: column; justify-content: center;
+    /* DRAG & SCROLL CONTINUOUS CONTAINER */
+    .drag-scroll {
+      display: flex; gap: 80px; width: 100%; overflow-x: auto; padding: 20px 0;
+      scroll-behavior: auto; -webkit-overflow-scrolling: touch; cursor: grab;
     }
+    .drag-scroll.active { cursor: grabbing; }
+    .drag-scroll::-webkit-scrollbar { display: none; }
+    
+    .drag-item { flex: 0 0 auto; user-select: none; }
 
     /* GLASSMORPHISM HEADER & MOBILE MENU */
     header {
@@ -49,60 +55,39 @@
       background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 300"><defs><linearGradient id="g" x1="0%25" y1="0%25" x2="100%25" y2="100%25"><stop offset="0%25" stop-color="%2366bb6a"/><stop offset="50%25" stop-color="%232e7d32"/><stop offset="100%25" stop-color="%231b5e20"/></linearGradient></defs><path fill="url(%23g)" d="M50 10 C 90 80 80 230 50 290 C 20 230 10 80 50 10 Z"/><path stroke="%231b5e20" stroke-width="3" fill="none" d="M50 10 Q 50 150 50 290"/><path stroke="%234caf50" stroke-width="1.5" fill="none" opacity="0.6" d="M50 150 L75 100 M50 180 L70 140 M50 210 L65 180 M50 150 L25 100 M50 180 L30 140 M50 210 L35 180"/></svg>') no-repeat center/contain;
       opacity: 0.8; animation: fall linear infinite; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.2));
     }
-    @keyframes fall {
-      0% { transform: translateY(-150px) rotate(-15deg) translateX(0); opacity: 0; }
-      10% { opacity: 0.9; }
-      90% { opacity: 0.9; }
-      100% { transform: translateY(110vh) rotate(45deg) translateX(200px); opacity: 0; }
-    }
+    @keyframes fall { 0% { transform: translateY(-150px) rotate(-15deg) translateX(0); opacity: 0; } 10% { opacity: 0.9; } 90% { opacity: 0.9; } 100% { transform: translateY(110vh) rotate(45deg) translateX(200px); opacity: 0; } }
+
+    /* FUN FLOATING MANGO EMOJI BACKGROUND */
+    .fun-mango { position: absolute; font-size: 80px; opacity: 0.15; animation: floatMango 8s ease-in-out infinite alternate; z-index: 2; pointer-events: none; }
+    @keyframes floatMango { 0% { transform: translateY(0) rotate(0deg); } 100% { transform: translateY(-30px) rotate(20deg); } }
 
     /* HERO SECTION */
-    .hero { background: url("sharp_bg.png") center/cover no-repeat; height: 100vh; align-items: flex-start; justify-content: center; padding-top: 15vh; }
+    .hero { background: url("sharp_bg.png") center/cover no-repeat; height: 100vh; display: flex; align-items: center; justify-content: flex-start; padding-top: 5vh; position: relative; }
     .hero::before { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(255,206,52,.9), rgba(0,0,0,.2)); z-index: 1; }
     .hero-content { position: relative; z-index: 5; padding: 0 5%; width: 100%; }
 
-    .text-box { max-width: 800px; opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
+    .text-box { max-width: 800px; opacity: 0; transform: translateY(30px); transition: all 1s ease-out; position: relative; }
     .text-box.visible { opacity: 1; transform: translateY(0); }
 
-    .eyebrow {
-      display: inline-flex; align-items: center; gap: 10px; background: rgba(255, 255, 255, 0.9);
-      padding: 8px 20px; border-radius: 40px; font-size: 18px; font-weight: 800; color: #e06000;
-      margin-bottom: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); border: 2px solid #e06000;
-    }
-
+    .eyebrow { display: inline-flex; align-items: center; gap: 10px; background: rgba(255, 255, 255, 0.9); padding: 8px 20px; border-radius: 40px; font-size: 18px; font-weight: 800; color: #e06000; margin-bottom: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); border: 2px solid #e06000; }
     h1 { font-size: clamp(45px, 6vw, 95px); line-height: 1.1; font-weight: 900; letter-spacing: -1px; color: #431700; text-shadow: 0 5px 15px rgba(0,0,0,.15); margin-bottom: 20px; }
     h1 span { display: block; color: #fff; text-shadow: 0 5px 20px rgba(0,0,0,.4); }
-
     .desc { font-size: 24px; line-height: 1.6; font-weight: 800; color: #3d1805; max-width: 600px; text-shadow: 0 2px 5px rgba(255,255,255,.8); }
 
-    .swipe-indicator {
-      position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); font-size: 20px; font-weight: 900;
-      color: #fff; display: flex; flex-direction: column; align-items: center; gap: 5px; z-index: 20; animation: bounce 2s infinite; text-shadow: 0 2px 10px rgba(0,0,0,0.5);
-    }
-    @keyframes bounce { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, 15px); } }
     .bottom-wave { position: absolute; left: 0; bottom: -2px; width: 100%; height: 150px; background: linear-gradient(180deg, transparent, #fffdf8); z-index: 6; }
 
-    /* PAGE 2: MANGO COLLECTION (Horizontal Swipe on Mobile) */
-    .mango-page { background: #fffdf8; background-image: radial-gradient(#ffdf80 1px, transparent 1px); background-size: 40px 40px; padding: 100px 0; }
+    /* PAGE 2: MANGO COLLECTION */
+    .mango-page { background: #fffdf8; background-image: radial-gradient(#ffdf80 1px, transparent 1px); background-size: 40px 40px; padding: 100px 0; overflow: hidden; }
     .section-title { font-size: 50px; font-weight: 900; color: #3d1805; margin-bottom: 60px; text-align: center; opacity: 0; transform: translateY(40px); transition: all 1s ease-out; }
     .section-title.visible { opacity: 1; transform: translateY(0); }
     .section-title span { color: #e06000; }
 
-    .cartoon-row { display: flex; justify-content: center; gap: 80px; width: 100%; }
-    .cartoon-item { display: flex; flex-direction: column; align-items: center; position: relative; opacity: 0; transform: translateY(60px); transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-    .cartoon-item.visible { opacity: 1; transform: translateY(0); }
-    .cartoon-item:nth-child(1) { transition-delay: 0.1s; } .cartoon-item:nth-child(2) { transition-delay: 0.3s; } .cartoon-item:nth-child(3) { transition-delay: 0.5s; }
+    .cartoon-item { display: flex; flex-direction: column; align-items: center; position: relative; width: 300px; }
+    .cartoon-item img { width: 260px; height: 260px; object-fit: contain; mix-blend-mode: multiply; pointer-events: none; transform-origin: bottom center; z-index: 5; }
+    .cartoon-item:hover img { animation: dance 0.6s ease-in-out infinite alternate; }
+    @keyframes dance { 0% { transform: scale(1) translateY(0) rotate(0deg); } 33% { transform: scale(1.1, 0.9) translateY(10px) rotate(-10deg); } 66% { transform: scale(0.9, 1.1) translateY(-15px) rotate(10deg); } 100% { transform: scale(1.05, 0.95) translateY(0) rotate(-5deg); } }
 
-    .cartoon-item img { width: 260px; height: 260px; object-fit: contain; mix-blend-mode: multiply; cursor: pointer; transform-origin: bottom center; z-index: 5; }
-    .cartoon-item img:hover { animation: dance 0.6s ease-in-out infinite alternate; }
-    @keyframes dance {
-      0% { transform: scale(1) translateY(0) rotate(0deg); }
-      33% { transform: scale(1.1, 0.9) translateY(10px) rotate(-10deg); }
-      66% { transform: scale(0.9, 1.1) translateY(-15px) rotate(10deg); }
-      100% { transform: scale(1.05, 0.95) translateY(0) rotate(-5deg); }
-    }
-
-    .shadow-oval { width: 150px; height: 20px; background: rgba(0,0,0,0.1); border-radius: 50%; margin-top: -30px; filter: blur(5px); margin-bottom: 30px; }
+    .shadow-oval { width: 150px; height: 20px; background: rgba(0,0,0,0.1); border-radius: 50%; margin-top: -30px; filter: blur(5px); margin-bottom: 30px; pointer-events: none; }
 
     .name-tag-wrapper { position: absolute; top: 15px; left: 65%; transform-origin: top center; animation: swingTag 4s ease-in-out infinite alternate; z-index: 10; display: flex; flex-direction: column; align-items: center; pointer-events: none; }
     .cartoon-item:nth-child(even) .name-tag-wrapper { animation: swingTag 5s ease-in-out infinite alternate-reverse; }
@@ -114,57 +99,38 @@
     .order-btn {
       background: linear-gradient(90deg, #4a1604, #661f06); color: #ffd431; padding: 16px 40px; border-radius: 50px;
       font-family: inherit; font-size: 22px; font-weight: 900; border: none; cursor: pointer;
-      box-shadow: 0 12px 25px rgba(74, 22, 4, 0.3); transition: .3s; margin-top: 20px; z-index: 10;
+      box-shadow: 0 12px 25px rgba(74, 22, 4, 0.3); transition: .2s cubic-bezier(0.175, 0.885, 0.32, 1.275); margin-top: 20px; z-index: 10; position: relative;
     }
-    .order-btn:hover { transform: translateY(-8px) scale(1.05); box-shadow: 0 18px 35px rgba(74, 22, 4, 0.5); }
+    .order-btn:hover { transform: translateY(-5px) scale(1.05); box-shadow: 0 18px 35px rgba(74, 22, 4, 0.5); }
+    .order-btn:active { transform: scale(0.9); /* Squish animation */ }
 
     /* PAGE 3: FEATURES (Why Choose Us) */
-    .features-page { background: #fff; padding: 100px 5%; }
-    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; }
-    .feature-card {
-      background: #fffdf8; border: 2px solid #ffeeba; border-radius: 20px; padding: 40px 30px; text-align: center;
-      transition: all 0.4s ease; opacity: 0; transform: translateY(40px); box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-    }
-    .feature-card.visible { opacity: 1; transform: translateY(0); }
+    .features-page { background: #fff; padding: 100px 0; overflow: hidden; }
+    .feature-card { background: #fffdf8; border: 2px solid #ffeeba; border-radius: 20px; padding: 40px 30px; text-align: center; transition: all 0.4s ease; box-shadow: 0 10px 30px rgba(0,0,0,0.05); width: 350px; pointer-events: none; }
     .feature-card:hover { transform: translateY(-15px); box-shadow: 0 20px 40px rgba(244, 169, 9, 0.2); border-color: #f4a909; }
     .f-icon { font-size: 60px; margin-bottom: 20px; display: inline-block; animation: floatIcon 3s infinite ease-in-out alternate; }
     @keyframes floatIcon { 0% { transform: translateY(0); } 100% { transform: translateY(-10px); } }
     .feature-card h3 { font-size: 26px; color: #3d1805; margin-bottom: 15px; font-weight: 900; }
     .feature-card p { font-size: 18px; color: #555; line-height: 1.6; }
 
-    /* PAGE 4: TESTIMONIALS (Marquee) */
+    /* PAGE 4: TESTIMONIALS */
     .testi-page { background: #fdf5e0; padding: 100px 0; overflow: hidden; position: relative; }
-    .marquee-container { display: flex; width: max-content; animation: scrollMarquee 25s linear infinite; gap: 30px; padding: 20px 0; }
-    .marquee-container:hover { animation-play-state: paused; }
-    .testi-card { background: #fff; width: 400px; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border-left: 5px solid #f4a909; }
+    .testi-card { background: #fff; width: 400px; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border-left: 5px solid #f4a909; pointer-events: none; }
     .stars { color: #f4a909; font-size: 22px; margin-bottom: 15px; }
     .testi-text { font-size: 20px; color: #444; font-style: italic; margin-bottom: 20px; line-height: 1.5; }
     .customer { font-weight: 900; color: #3d1805; font-size: 18px; }
-    @keyframes scrollMarquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-
-    /* PAGE 5: STORY PARALLAX */
-    .story-page {
-      background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.85)), url('sharp_bg.png') center/cover no-repeat fixed;
-      padding: 120px 5%; color: #fff; text-align: center;
-    }
-    .story-content { max-width: 900px; margin: 0 auto; opacity: 0; transform: translateY(50px); transition: all 1s ease-out; }
-    .story-content.visible { opacity: 1; transform: translateY(0); }
-    .story-content h2 { font-size: 55px; font-weight: 900; margin-bottom: 30px; }
-    .story-content h2 span { color: #f4a909; }
-    .story-content p { font-size: 24px; line-height: 1.8; margin-bottom: 50px; color: #f1f1f1; }
-    
-    .story-badges { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
-    .s-badge { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 15px 30px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.2); font-size: 20px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
 
     /* FOOTER SECTION */
     footer { background: #1a0a00; color: #fff; padding: 80px 5% 40px; position: relative; overflow: hidden; }
-    footer::before { content: ""; position: absolute; top: -50px; left: -50px; width: 200px; height: 200px; background: #f4a909; filter: blur(100px); opacity: 0.2; }
+    footer::before { content: ""; position: absolute; top: -50px; left: -50px; width: 200px; height: 200px; background: #f4a909; filter: blur(100px); opacity: 0.2; pointer-events: none; }
     .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 50px; max-width: 1200px; margin: 0 auto; margin-bottom: 50px; }
     .footer-col h3 { font-size: 28px; font-family: "Poppins", sans-serif; color: #f4a909; margin-bottom: 25px; font-weight: 900; }
     .footer-col p { font-size: 18px; line-height: 1.8; color: #bbb; margin-bottom: 15px; display: flex; align-items: flex-start; gap: 10px; }
     .footer-col a { color: #bbb; text-decoration: none; transition: 0.3s; display: block; margin-bottom: 10px; font-size: 18px; }
     .footer-col a:hover { color: #f4a909; padding-left: 10px; }
-    .footer-bottom { text-align: center; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); color: #777; font-size: 16px; }
+    .footer-bottom { text-align: center; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); color: #777; font-size: 18px; font-weight: 800; }
+    .footer-bottom span { color: #f4a909; animation: heartbeat 1.5s infinite; display: inline-block; }
+    @keyframes heartbeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.3); } }
 
     /* DYNAMIC CHECKOUT MODAL */
     .checkout-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); z-index: 2000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: 0.4s; padding: 20px; }
@@ -199,6 +165,7 @@
 
     .confirm-btn { background: linear-gradient(90deg, #f4a909, #ff5722); color: #fff; width: 100%; padding: 22px; border: none; border-radius: 15px; font-size: 26px; font-weight: 900; font-family: inherit; cursor: pointer; box-shadow: 0 15px 30px rgba(244, 169, 9, 0.3); transition: 0.3s; }
     .confirm-btn:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(244, 169, 9, 0.5); }
+    .confirm-btn:active { transform: scale(0.95); }
 
     /* Success Screen */
     .success-overlay { position: absolute; inset: 0; background: #fff; z-index: 50; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: 0.5s; text-align: center; padding: 30px; }
@@ -213,83 +180,44 @@
        📱 ULTIMATE MOBILE RESPONSIVENESS OVERHAUL
        ========================================================= */
     @media (max-width: 900px) {
-      /* Disable rigid snapping so things can scroll naturally */
-      html, body { scroll-snap-type: none; overflow-y: auto; }
-      .snap-section { min-height: auto; padding: 80px 0; scroll-snap-align: none; }
-      .hero { height: 100vh; padding-top: 100px; } /* Hero remains full screen */
-
-      /* Header & Hamburger */
-      header { padding: 0 20px; height: 80px; background: rgba(255,255,255,0.9); }
+      .hero { padding-top: 100px; }
+      
+      /* Header & Glassmorphism Hamburger */
+      header { padding: 0 20px; height: 80px; background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); }
       .menu-btn { display: block; }
       nav {
         position: fixed; top: 0; right: -100%; width: 280px; height: 100vh;
-        background: rgba(255,255,255,0.95); backdrop-filter: blur(20px);
+        background: rgba(255,255,255,0.3); backdrop-filter: blur(35px); -webkit-backdrop-filter: blur(35px);
         flex-direction: column; align-items: flex-start; padding: 100px 40px;
         box-shadow: -10px 0 30px rgba(0,0,0,0.1); transition: 0.4s ease;
       }
       nav.active { right: 0; }
-      nav a { font-size: 26px; border-bottom: 1px solid #eee; width: 100%; padding-bottom: 15px; }
+      nav a { font-size: 20px; border-bottom: 1px solid rgba(0,0,0,0.1); width: 100%; padding-bottom: 15px; text-shadow: 0 1px 5px rgba(255,255,255,0.5); }
 
-      /* Hero Text */
-      .eyebrow { font-size: 14px; padding: 6px 15px; margin-bottom: 15px; }
       h1 { font-size: 45px; letter-spacing: 0; }
       .desc { font-size: 18px; }
 
-      /* Horizontal Swipable Mango Carousel */
-      .section-title { font-size: 38px; margin-bottom: 40px; padding: 0 20px; }
-      .mango-page { padding: 60px 0; }
-      .cartoon-row {
-        justify-content: flex-start; gap: 0; padding: 0;
-        overflow-x: auto; scroll-snap-type: x mandatory; /* The Magic Swipe */
-        scroll-behavior: smooth; -webkit-overflow-scrolling: touch;
-      }
-      .cartoon-row::-webkit-scrollbar { display: none; }
-      .cartoon-item {
-        min-width: 100vw; /* Take full screen width */
-        scroll-snap-align: center; padding-top: 40px;
-      }
+      .section-title { font-size: 35px; margin-bottom: 30px; padding: 0 20px; }
+      .mango-page, .features-page, .testi-page { padding: 60px 0; }
+      
+      .drag-scroll { gap: 30px; padding: 10px 20px; }
+      .cartoon-item { width: 280px; }
       .cartoon-item img { width: 220px; height: 220px; }
       .name-tag-wrapper { top: 30px; left: 60%; }
       .order-btn { font-size: 20px; padding: 15px 35px; }
-
-      /* Features & Testimonials */
-      .features-page { padding: 60px 20px; }
-      .testi-page { padding: 60px 0; }
-      .testi-card { width: 300px; padding: 20px; }
       
-      /* Story Badges */
-      .story-content h2 { font-size: 40px; }
-      .story-content p { font-size: 18px; }
-      .story-badges { gap: 15px; }
-      .s-badge { font-size: 16px; padding: 10px 20px; }
+      .feature-card { width: 300px; padding: 30px 20px; }
+      .testi-card { width: 320px; padding: 25px; }
 
-      /* Footer */
       footer { padding: 60px 20px 30px; }
       .footer-col h3 { font-size: 24px; }
       .footer-col p { font-size: 16px; }
 
-      /* Checkout Modal - Removing the squeeze (চিপা) feeling */
       .modal-content { flex-direction: column; height: 95vh; border-radius: 20px; overflow-y: auto; }
       .modal-left { flex: none; height: 200px; padding: 30px 20px; }
       .modal-left h2 { font-size: 38px; }
-      .modal-left::before { background: linear-gradient(0deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 100%); }
-      
       .modal-right { padding: 25px 20px; }
-      .form-title { font-size: 26px; text-align: center; margin-bottom: 20px; }
-      .package-grid { gap: 10px; }
-      .package-card { padding: 10px 5px; }
       .package-card h4 { font-size: 18px; }
-      .package-card img { width: 45px; height: 45px; }
-      
-      .input-group label { font-size: 16px; }
-      .input-group input, .input-group textarea { padding: 15px; font-size: 16px; border-radius: 10px; }
-      
-      .billing-section { padding: 15px; border-radius: 10px; }
-      .bill-row { font-size: 16px; }
-      .bill-row.total { font-size: 22px; }
-      
-      .confirm-btn { padding: 18px; font-size: 22px; border-radius: 10px; }
-      .close-btn { top: 10px; right: 10px; width: 35px; height: 35px; font-size: 24px; }
     }
   </style>
 </head>
@@ -311,7 +239,9 @@
   </header>
 
   <!-- HERO SECTION -->
-  <section class="hero snap-section">
+  <section class="hero">
+    <div class="fun-mango" style="top: 20%; right: 15%;">🥭</div>
+    <div class="fun-mango" style="bottom: 30%; left: 10%; font-size: 50px; animation-duration: 6s;">🥭</div>
     <div class="hero-content">
       <div class="text-box reveal-target">
         <div class="eyebrow">✔ ১০০% ফরমালিন মুক্ত</div>
@@ -324,55 +254,49 @@
         </p>
       </div>
     </div>
-    <div class="swipe-indicator">নিচে দেখুন <span>▼</span></div>
     <div class="bottom-wave"></div>
   </section>
 
-  <!-- PAGE 2: MANGO COLLECTION (Horizontal Swipe on Mobile) -->
-  <section id="collection" class="mango-page snap-section">
+  <!-- PAGE 2: MANGO COLLECTION (Auto Scroll + Touch Drag) -->
+  <section id="collection" class="mango-page">
     <h2 class="section-title reveal-target">আমাদের <span>আম</span> কালেকশন</h2>
-    <div class="cartoon-row">
-      <!-- Item 1 -->
-      <div class="cartoon-item reveal-target">
+    <div class="drag-scroll" id="mangoScroller">
+      <div class="drag-item cartoon-item">
         <img src="cartoon_amrapali.png" alt="Amrapali">
         <div class="shadow-oval"></div>
         <div class="name-tag-wrapper"><div class="string"></div><div class="name-tag">আম রূপালি</div></div>
         <button class="order-btn" onclick="openModal('আম রূপালি', 'cartoon_amrapali.png')">আমাকে অর্ডার করুন</button>
       </div>
-      <!-- Item 2 -->
-      <div class="cartoon-item reveal-target">
+      <div class="drag-item cartoon-item">
         <img src="cartoon_fazli.png" alt="Fazli">
         <div class="shadow-oval"></div>
         <div class="name-tag-wrapper"><div class="string"></div><div class="name-tag">ফজলি</div></div>
         <button class="order-btn" onclick="openModal('ফজলি', 'cartoon_fazli.png')">আমাকে অর্ডার করুন</button>
       </div>
-      <!-- Item 3 -->
-      <div class="cartoon-item reveal-target">
+      <div class="drag-item cartoon-item">
         <img src="cartoon_langra.png" alt="Langra">
         <div class="shadow-oval"></div>
         <div class="name-tag-wrapper"><div class="string"></div><div class="name-tag">ল্যাংড়া</div></div>
         <button class="order-btn" onclick="openModal('ল্যাংড়া', 'cartoon_langra.png')">আমাকে অর্ডার করুন</button>
       </div>
     </div>
-    <!-- Hint for mobile users -->
-    <p style="text-align:center; color:#888; margin-top:20px; font-weight:bold; font-size: 16px;" class="mobile-swipe-hint">👈 ডানে-বামে সোয়াইপ করুন 👉</p>
   </section>
 
-  <!-- PAGE 3: FEATURES (Why Choose Us) -->
-  <section id="features" class="features-page snap-section">
+  <!-- PAGE 3: FEATURES (Auto Scroll + Touch Drag) -->
+  <section id="features" class="features-page">
     <h2 class="section-title reveal-target">কেন আমরা <span>সেরা?</span></h2>
-    <div class="features-grid">
-      <div class="feature-card reveal-target">
+    <div class="drag-scroll" id="featureScroller">
+      <div class="drag-item feature-card">
         <div class="f-icon">🚫</div>
         <h3>১০০% ফরমালিন মুক্ত</h3>
-        <p>আমাদের আমগুলো কোনো প্রকার ক্ষতিকারক কেমিক্যাল বা ফরমালিন ছাড়াই সম্পূর্ণ প্রাকৃতিকভাবে পাকানো হয়। আপনার স্বাস্থ্যই আমাদের প্রথম অগ্রাধিকার।</p>
+        <p>আমাদের আমগুলো কোনো প্রকার ক্ষতিকারক কেমিক্যাল বা ফরমালিন ছাড়াই সম্পূর্ণ প্রাকৃতিকভাবে পাকানো হয়।</p>
       </div>
-      <div class="feature-card reveal-target" style="transition-delay: 0.2s;">
+      <div class="drag-item feature-card">
         <div class="f-icon">🌳</div>
         <h3>সরাসরি বাগান থেকে</h3>
         <p>রাজশাহীর নিজস্ব বিখ্যাত বাগানগুলো থেকে সেরা মানের আম বেছে সরাসরি আপনার ঠিকানায় পৌঁছে দেওয়া হয়।</p>
       </div>
-      <div class="feature-card reveal-target" style="transition-delay: 0.4s;">
+      <div class="drag-item feature-card">
         <div class="f-icon">💵</div>
         <h3>ক্যাশ অন ডেলিভারি</h3>
         <p>আগে আম হাতে পাবেন, কোয়ালিটি চেক করবেন, এরপর মূল্য পরিশোধ করবেন। কোনো অগ্রিম পেমেন্টের ঝামেলা নেই!</p>
@@ -380,43 +304,24 @@
     </div>
   </section>
 
-  <!-- PAGE 4: STORY PARALLAX -->
-  <section class="story-page snap-section">
-    <div class="story-content reveal-target">
-      <h2>রাজশাহীর <span>ঐতিহ্য</span></h2>
-      <p>আমরা বিশ্বাস করি গুণগত মানে। যুগের পর যুগ ধরে রাজশাহীর আম তার অতুলনীয় স্বাদ ও সুবাসের জন্য বিখ্যাত। আমরা সেই ঐতিহ্যবাহী স্বাদটিই কোনো ভেজাল ছাড়া আপনার খাবার টেবিলে পৌঁছে দিতে বদ্ধপরিকর।</p>
-      <div class="story-badges">
-        <div class="s-badge"><span>🌿</span> পিওর অর্গানিক</div>
-        <div class="s-badge"><span>🚚</span> দ্রুত ডেলিভারি</div>
-        <div class="s-badge"><span>⭐</span> প্রিমিয়াম কোয়ালিটি</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PAGE 5: TESTIMONIALS -->
-  <section class="testi-page snap-section">
+  <!-- PAGE 4: TESTIMONIALS (Auto Scroll + Touch Drag) -->
+  <section class="testi-page">
     <h2 class="section-title reveal-target">গ্রাহকদের <span>মতামত</span></h2>
-    <div class="marquee-container">
-      <div class="testi-card">
+    <div class="drag-scroll" id="testiScroller">
+      <div class="drag-item testi-card">
         <div class="stars">★★★★★</div>
         <p class="testi-text">"এত সুন্দর মিষ্টি এবং ফ্রেশ আম আমি এর আগে অনলাইনে পাইনি। প্যাকিংও ছিল অসাধারণ। ১০০% রেকমেন্ডেড!"</p>
         <p class="customer">— মোঃ শফিকুল ইসলাম, ঢাকা</p>
       </div>
-      <div class="testi-card">
+      <div class="drag-item testi-card">
         <div class="stars">★★★★★</div>
         <p class="testi-text">"আম রূপালি আমের সাইজ এবং স্বাদ একদম পারফেক্ট। ফরমালিন মুক্ত হওয়ায় নিশ্চিন্তে বাচ্চাদের খাওয়াতে পারছি।"</p>
         <p class="customer">— সুমাইয়া রহমান, চট্টগ্রাম</p>
       </div>
-      <div class="testi-card">
+      <div class="drag-item testi-card">
         <div class="stars">★★★★★</div>
         <p class="testi-text">"অর্ডার করার ২ দিনের মাথায় ডেলিভারি পেয়েছি। ফজলি আমগুলো সত্যিই অনেক বড় এবং সুস্বাদু ছিল। ধন্যবাদ ম্যাংগো কিং!"</p>
         <p class="customer">— রাশেদ খান, সিলেট</p>
-      </div>
-      <!-- Duplicates for infinite scroll illusion -->
-      <div class="testi-card">
-        <div class="stars">★★★★★</div>
-        <p class="testi-text">"এত সুন্দর মিষ্টি এবং ফ্রেশ আম আমি এর আগে অনলাইনে পাইনি। প্যাকিংও ছিল অসাধারণ। ১০০% রেকমেন্ডেড!"</p>
-        <p class="customer">— মোঃ শফিকুল ইসলাম, ঢাকা</p>
       </div>
     </div>
   </section>
@@ -429,26 +334,20 @@
         <p style="color:#ddd;">বাংলাদেশের অন্যতম সেরা ও বিশ্বস্ত প্রিমিয়াম অনলাইন আম শপ। আমরা দিচ্ছি ১০০% ফরমালিন মুক্ত গাছপাকা আমের গ্যারান্টি।</p>
       </div>
       <div class="footer-col">
-        <h3 style="color:#fff;">জরুরি লিংক</h3>
-        <a href="#">আমাদের সম্পর্কে</a>
-        <a href="#collection">আমের কালেকশন</a>
-        <a href="#">প্রাইভেসি পলিসি</a>
-        <a href="#">রিফান্ড পলিসি</a>
-      </div>
-      <div class="footer-col">
         <h3 style="color:#fff;">যোগাযোগ</h3>
         <p>📍 <span>বিনোদপুর অফিস, রাজশাহী বিশ্ববিদ্যালয় সংলগ্ন, রাজশাহী, বাংলাদেশ।</span></p>
-        <p>📞 <span>+880 1700-112233</span></p>
+        <p>📞 <span>০১৩১০৮৮৭২৪১</span></p>
         <p>✉️ <span>support@mangoking.com</span></p>
       </div>
     </div>
     <div class="footer-bottom">
-      &copy; 2026 MangoKing. All Rights Reserved. Designed with ❤️
+      Designed with <span>❤️</span> by <b>Abu Saleh Akon</b>
     </div>
   </footer>
 
   <!-- CHECKOUT MODAL -->
   <div class="checkout-modal" id="checkoutModal">
+    <!-- Modal content remains exactly the same logic -->
     <div class="modal-content">
       <div class="close-btn" onclick="closeModal()">✕</div>
       <div class="modal-left">
@@ -510,21 +409,12 @@
 
   <a href="admin.html" class="admin-link">⚙️ এডমিন প্যানেল</a>
 
-  <style>
-    @media (min-width: 901px) { .mobile-swipe-hint { display: none; } }
-  </style>
-
   <script>
     // MOBILE MENU LOGIC
-    function toggleMenu() {
-      const nav = document.getElementById('navMenu');
-      nav.classList.toggle('active');
-    }
-    function closeMenu() {
-      document.getElementById('navMenu').classList.remove('active');
-    }
+    function toggleMenu() { document.getElementById('navMenu').classList.toggle('active'); }
+    function closeMenu() { document.getElementById('navMenu').classList.remove('active'); }
 
-    // HEADER SCROLL EFFECT
+    // HEADER SCROLL
     window.addEventListener('scroll', () => {
       const header = document.getElementById('mainHeader');
       if(window.scrollY > 50) header.classList.add('scrolled');
@@ -533,38 +423,91 @@
 
     // SCROLL REVEAL MAGIC
     const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if(entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });
+      entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('visible'); });
     }, { threshold: 0.15 });
     document.querySelectorAll('.reveal-target').forEach(el => observer.observe(el));
 
-    // REALISTIC FALLING LEAVES
+    // LEAVES ANIMATION
     function spawnLeaf() {
       const container = document.getElementById('leaves-container');
       const leaf = document.createElement('div');
       leaf.classList.add('falling-leaf');
       leaf.style.left = Math.random() * 100 + 'vw';
       leaf.style.animationDuration = (Math.random() * 6 + 6) + 's';
-      
       const width = Math.random() * 15 + 25;
       leaf.style.width = width + 'px';
       leaf.style.height = (width * 3) + 'px';
       leaf.style.transform = `rotate(${Math.random() * 360}deg)`;
-      
       container.appendChild(leaf);
       setTimeout(() => leaf.remove(), 12000);
     }
     setInterval(spawnLeaf, 1000);
 
+    // AUTO-SCROLL + DRAG ENGINE FOR ALL 3 SECTIONS
+    function setupDragScroll(selector, speed) {
+      const slider = document.querySelector(selector);
+      if(!slider) return;
+      
+      let isDown = false, startX, scrollLeft, autoScrollInterval;
+
+      // Duplicate items to make it look infinite
+      const items = Array.from(slider.children);
+      items.forEach(item => slider.appendChild(item.cloneNode(true)));
+      items.forEach(item => slider.appendChild(item.cloneNode(true)));
+
+      function autoScroll() {
+        if(!isDown) {
+          slider.scrollLeft += speed;
+          // Soft reset to create infinite loop illusion
+          if(slider.scrollLeft >= slider.scrollWidth / 2) {
+            slider.scrollLeft = 0;
+          }
+        }
+        autoScrollInterval = requestAnimationFrame(autoScroll);
+      }
+      
+      autoScroll();
+
+      function pauseScroll() { isDown = true; cancelAnimationFrame(autoScrollInterval); }
+      function resumeScroll() { isDown = false; autoScroll(); }
+
+      // Mouse Events
+      slider.addEventListener('mousedown', (e) => {
+        pauseScroll();
+        slider.classList.add('active');
+        startX = e.pageX - slider.offsetLeft;
+        scrollLeft = slider.scrollLeft;
+      });
+      slider.addEventListener('mouseleave', () => { slider.classList.remove('active'); resumeScroll(); });
+      slider.addEventListener('mouseup', () => { slider.classList.remove('active'); resumeScroll(); });
+      slider.addEventListener('mousemove', (e) => {
+        if(!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - slider.offsetLeft;
+        slider.scrollLeft = scrollLeft - (x - startX) * 2;
+      });
+
+      // Touch Events
+      slider.addEventListener('touchstart', (e) => {
+        pauseScroll();
+        startX = e.touches[0].pageX - slider.offsetLeft;
+        scrollLeft = slider.scrollLeft;
+      }, {passive: true});
+      slider.addEventListener('touchend', resumeScroll);
+      slider.addEventListener('touchmove', (e) => {
+        if(!isDown) return;
+        const x = e.touches[0].pageX - slider.offsetLeft;
+        slider.scrollLeft = scrollLeft - (x - startX) * 2;
+      }, {passive: true});
+    }
+
+    // Initialize the scrollers (Speed: 1px per frame)
+    setupDragScroll('#mangoScroller', 1.2);
+    setupDragScroll('#featureScroller', 0.8);
+    setupDragScroll('#testiScroller', 1.5);
+
     // CHECKOUT LOGIC
-    let currentMango = '';
-    let currentKg = 5;
-    const pricePerKg = 300;
-    const deliveryCharge = 100;
-    let totalBillAmount = 1600;
+    let currentMango = ''; let currentKg = 5; const pricePerKg = 300; const deliveryCharge = 100; let totalBillAmount = 1600;
 
     function openModal(mangoName, imgFile) {
       currentMango = mangoName;
@@ -573,9 +516,6 @@
       document.getElementById('pkgImg5').src = imgFile;
       document.getElementById('pkgImg10').src = imgFile;
       document.getElementById('successOverlay').classList.remove('active');
-      document.getElementById('custName').value = '';
-      document.getElementById('custPhone').value = '';
-      document.getElementById('custAddress').value = '';
       selectPackage(5, document.querySelectorAll('.package-card')[1]);
       document.getElementById('checkoutModal').classList.add('active');
     }
@@ -586,8 +526,7 @@
       currentKg = kg;
       document.querySelectorAll('.package-card').forEach(card => card.classList.remove('selected'));
       element.classList.add('selected');
-      const mangoPrice = kg * pricePerKg;
-      totalBillAmount = mangoPrice + deliveryCharge;
+      totalBillAmount = (kg * pricePerKg) + deliveryCharge;
       
       const kgStr = kg.toString().replace(/0/g,'০').replace(/1/g,'১').replace(/2/g,'২').replace(/5/g,'৫').replace(/10/g,'১০');
       document.getElementById('calcFormula').innerText = `${kgStr} কেজি x ৩00`;
@@ -601,28 +540,13 @@
       const phone = document.getElementById('custPhone').value;
       const address = document.getElementById('custAddress').value;
 
-      if(!name || !phone || !address) {
-        alert("দয়া করে নাম, মোবাইল নম্বর এবং ঠিকানা পূরণ করুন।");
-        return;
-      }
+      if(!name || !phone || !address) { alert("দয়া করে সব তথ্য পূরণ করুন।"); return; }
 
-      // SAVE TO LOCALSTORAGE (DATABASE MOCKUP)
       const newOrder = {
-        id: 'ORD-' + Math.floor(Math.random() * 10000),
-        mango: currentMango,
-        package: currentKg + ' কেজি',
-        price: totalBillAmount + ' টাকা',
-        customer: name,
-        phone: phone,
-        address: address,
-        time: new Date().toLocaleString('bn-BD')
+        id: 'ORD-' + Math.floor(Math.random() * 10000), mango: currentMango, package: currentKg + ' কেজি', price: totalBillAmount + ' টাকা', customer: name, phone: phone, address: address, time: new Date().toLocaleString('bn-BD')
       };
-
       let orders = JSON.parse(localStorage.getItem('mangoOrders')) || [];
-      orders.unshift(newOrder); 
-      localStorage.setItem('mangoOrders', JSON.stringify(orders));
-
-      // Show Success Animation
+      orders.unshift(newOrder); localStorage.setItem('mangoOrders', JSON.stringify(orders));
       document.getElementById('successOverlay').classList.add('active');
     }
   </script>
