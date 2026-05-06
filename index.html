@@ -5,38 +5,43 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>MangoKing - Premium Magical Store</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500;700;800;900&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500;700;800;900&family=Poppins:wght@700;800;900&display=swap" rel="stylesheet">
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    /* MAGICAL MANGO CURSOR */
-    html, body {
-      font-family: "Hind Siliguri", sans-serif; background: #fdf5e0; color: #3a1505;
-      overflow-x: hidden; scroll-behavior: smooth;
+    /* MAGICAL MANGO CURSOR & SCROLL SNAP */
+    html {
+      scroll-snap-type: y mandatory;
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: "Hind Siliguri", sans-serif; background: #ffffff; color: #3a1505;
+      overflow-x: hidden;
       cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 64 64"><path fill="%23f4a909" stroke="%233d1805" stroke-width="2" d="M32 60c-15.5 0-28-12.5-28-28 0-15.5 12.5-28 28-28 15.5 0 28 12.5 28 28 0 15.5-12.5 28-28 28z"/></svg>') 14 14, auto;
     }
 
     ::-webkit-scrollbar { width: 0; display: none; }
 
-    /* DRAG & SCROLL CONTINUOUS CONTAINER (For Features & Testimonials) */
-    .drag-scroll {
-      display: flex; gap: 80px; width: 100%; overflow-x: auto; padding: 20px 0;
-      scroll-behavior: auto; -webkit-overflow-scrolling: touch; cursor: grab;
+    /* SNAP SECTIONS */
+    section {
+      min-height: 100vh;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      position: relative;
+      display: flex; flex-direction: column; justify-content: center;
     }
-    .drag-scroll.active { cursor: grabbing; }
-    .drag-scroll::-webkit-scrollbar { display: none; }
-    .drag-item { flex: 0 0 auto; user-select: none; }
 
     /* GLASSMORPHISM HEADER & MOBILE MENU */
     header {
-      height: 90px; background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.3); display: flex; align-items: center; justify-content: space-between;
+      height: 90px; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+      display: flex; align-items: center; justify-content: space-between;
       padding: 0 5%; position: fixed; top: 0; left: 0; right: 0; z-index: 1000; transition: all 0.3s ease;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     }
-    header.scrolled { background: rgba(255, 255, 255, 0.85); box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+    header.scrolled { box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
 
-    .logo { font-family: "Poppins", sans-serif; font-size: 35px; font-weight: 800; color: #3d1805; text-shadow: 0 2px 10px rgba(255,255,255,0.8); z-index: 1001; }
+    .logo { font-family: "Poppins", sans-serif; font-size: 35px; font-weight: 900; color: #222; z-index: 1001; letter-spacing: -1px; }
     .logo span { color: #f4a909; }
 
     nav { display: flex; gap: 40px; font-size: 20px; font-weight: 800; }
@@ -52,175 +57,200 @@
     .falling-leaf {
       position: absolute; top: -150px;
       background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 300"><defs><linearGradient id="g" x1="0%25" y1="0%25" x2="100%25" y2="100%25"><stop offset="0%25" stop-color="%2366bb6a"/><stop offset="50%25" stop-color="%232e7d32"/><stop offset="100%25" stop-color="%231b5e20"/></linearGradient></defs><path fill="url(%23g)" d="M50 10 C 90 80 80 230 50 290 C 20 230 10 80 50 10 Z"/><path stroke="%231b5e20" stroke-width="3" fill="none" d="M50 10 Q 50 150 50 290"/><path stroke="%234caf50" stroke-width="1.5" fill="none" opacity="0.6" d="M50 150 L75 100 M50 180 L70 140 M50 210 L65 180 M50 150 L25 100 M50 180 L30 140 M50 210 L35 180"/></svg>') no-repeat center/contain;
-      opacity: 0.8; animation: fall linear infinite; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.2));
+      opacity: 0.5; animation: fall linear infinite;
     }
-    @keyframes fall { 0% { transform: translateY(-150px) rotate(-15deg) translateX(0); opacity: 0; } 10% { opacity: 0.9; } 90% { opacity: 0.9; } 100% { transform: translateY(110vh) rotate(45deg) translateX(200px); opacity: 0; } }
+    @keyframes fall { 0% { transform: translateY(-150px) rotate(-15deg) translateX(0); opacity: 0; } 10% { opacity: 0.8; } 90% { opacity: 0.8; } 100% { transform: translateY(110vh) rotate(45deg) translateX(200px); opacity: 0; } }
 
-    /* FUN FLOATING MANGO EMOJI BACKGROUND */
-    .fun-mango { position: absolute; font-size: 80px; opacity: 0.15; animation: floatMango 8s ease-in-out infinite alternate; z-index: 2; pointer-events: none; }
-    @keyframes floatMango { 0% { transform: translateY(0) rotate(0deg); } 100% { transform: translateY(-30px) rotate(20deg); } }
-
-    /* HERO SECTION */
-    .hero { background: url("sharp_bg.png") center/cover no-repeat; height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding-top: 130px; position: relative; }
-    .hero::before { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(255,206,52,.9), rgba(0,0,0,.2)); z-index: 1; }
-    .hero-content { position: relative; z-index: 5; padding: 0 5%; width: 100%; margin-top: 5vh; }
-
-    .text-box { max-width: 800px; opacity: 0; transform: translateY(30px); transition: all 1s ease-out; position: relative; }
-    .text-box.visible { opacity: 1; transform: translateY(0); }
-
-    .eyebrow { display: inline-flex; align-items: center; gap: 10px; background: rgba(255, 255, 255, 0.9); padding: 8px 20px; border-radius: 40px; font-size: 18px; font-weight: 800; color: #e06000; margin-bottom: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); border: 2px solid #e06000; }
-    h1 { font-size: clamp(45px, 6vw, 95px); line-height: 1.1; font-weight: 900; letter-spacing: -1px; color: #431700; text-shadow: 0 5px 15px rgba(0,0,0,.15); margin-bottom: 20px; }
-    h1 span { display: block; color: #fff; text-shadow: 0 5px 20px rgba(0,0,0,.4); }
-    .desc { font-size: 24px; line-height: 1.6; font-weight: 800; color: #3d1805; max-width: 600px; text-shadow: 0 2px 5px rgba(255,255,255,.8); }
-
-    .bottom-wave { position: absolute; left: 0; bottom: -2px; width: 100%; height: 150px; background: linear-gradient(180deg, transparent, #fffdf8); z-index: 6; }
-
-    /* PAGE 2: MANGO COLLECTION (GRID LAYOUT) */
-    .mango-page { background: #fffdf8; background-image: radial-gradient(#ffdf80 1px, transparent 1px); background-size: 40px 40px; padding: 100px 5%; overflow: hidden; }
-    .section-title { font-size: 50px; font-weight: 900; color: #3d1805; margin-bottom: 60px; text-align: center; opacity: 0; transform: translateY(40px); transition: all 1s ease-out; }
-    .section-title.visible { opacity: 1; transform: translateY(0); }
-    .section-title span { color: #e06000; }
-
-    .mango-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 50px; max-width: 1200px; margin: 0 auto; }
+    /* ULTRA-PREMIUM HERO SECTION (FIXED LAYOUT) */
+    .hero { 
+      background: #ffffff; overflow: hidden; display: flex; align-items: center; justify-content: center; padding: 100px 5%;
+    }
     
-    .cartoon-item { display: flex; flex-direction: column; align-items: center; position: relative; width: 100%; opacity: 0; transform: translateY(50px); transition: all 0.8s ease-out; }
-    .cartoon-item.visible { opacity: 1; transform: translateY(0); }
-    .cartoon-item img { width: 260px; height: 260px; object-fit: contain; mix-blend-mode: multiply; pointer-events: none; transform-origin: bottom center; z-index: 5; }
-    .cartoon-item:hover img { animation: dance 0.6s ease-in-out infinite alternate; }
-
-    .shadow-oval { width: 60%; height: 20px; background: rgba(0,0,0,0.1); border-radius: 50%; margin-top: -30px; filter: blur(5px); margin-bottom: 30px; pointer-events: none; }
-
-    .name-tag-wrapper { position: absolute; top: 15px; left: 65%; transform-origin: top center; animation: swingTag 4s ease-in-out infinite alternate; z-index: 10; display: flex; flex-direction: column; align-items: center; pointer-events: none; }
-    .cartoon-item:nth-child(even) .name-tag-wrapper { animation: swingTag 5s ease-in-out infinite alternate-reverse; }
-    .string { width: 3px; height: 50px; background: linear-gradient(180deg, #d32f2f, #b71c1c); box-shadow: 1px 1px 3px rgba(0,0,0,0.3); border-radius: 2px; }
-    .name-tag { background: #fffdf5; padding: 6px 18px; border-radius: 8px; border: 2px solid #d32f2f; font-size: 18px; font-weight: 900; color: #3d1805; box-shadow: 0 5px 15px rgba(0,0,0,0.25); margin-top: -5px; position: relative; white-space: nowrap; }
-    .name-tag::before { content: ""; position: absolute; top: 4px; left: 50%; transform: translateX(-50%); width: 6px; height: 6px; background: #d32f2f; border-radius: 50%; }
-    @keyframes swingTag { 0% { transform: rotate(-12deg); } 100% { transform: rotate(12deg); } }
-
-    .order-btn {
-      background: linear-gradient(90deg, #4a1604, #661f06); color: #ffd431; padding: 15px 30px; border-radius: 50px;
-      font-family: inherit; font-size: 20px; font-weight: 900; border: none; cursor: pointer;
-      box-shadow: 0 10px 20px rgba(74, 22, 4, 0.3); transition: .2s cubic-bezier(0.175, 0.885, 0.32, 1.275); margin-top: 10px; z-index: 10; position: relative; width: 90%;
+    .hero-bg-text {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      font-family: "Poppins", sans-serif; font-size: 22vw; font-weight: 900; line-height: 0.8;
+      color: #f4a909; opacity: 0.04; text-align: center; white-space: nowrap; pointer-events: none; z-index: 1;
     }
-    .order-btn:hover { transform: translateY(-5px) scale(1.05); box-shadow: 0 15px 30px rgba(74, 22, 4, 0.5); }
-    .order-btn:active { transform: scale(0.9); }
+
+    .hero-container {
+      display: flex; align-items: center; justify-content: space-between; max-width: 1200px; width: 100%; z-index: 10;
+    }
+
+    .hero-content {
+      flex: 1; max-width: 600px;
+    }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px; background: #fff;
+      padding: 6px 18px; border-radius: 40px; font-size: 16px; font-weight: 800; color: #431700;
+      margin-bottom: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); border: 1px solid #f4a909;
+    }
+    .main-title {
+      font-size: clamp(45px, 6vw, 80px); line-height: 1.1; font-weight: 900; letter-spacing: -1px; color: #1a0a00;
+    }
+    .main-title span { color: #f4a909; display: block; }
+    .hero-desc {
+      font-size: 20px; color: #666; margin-top: 20px; line-height: 1.6; font-weight: 600; max-width: 500px;
+    }
+
+    .hero-image-wrapper {
+      flex: 1; display: flex; justify-content: center; position: relative;
+    }
+    .hero-image-wrapper img {
+      width: 100%; max-width: 500px; object-fit: contain; mix-blend-mode: multiply;
+      animation: heroFloat 4s ease-in-out infinite alternate;
+    }
+    @keyframes heroFloat { 0% { transform: translateY(0px); } 100% { transform: translateY(-20px); } }
+
+    /* PAGE 2: MANGO COLLECTION (CLEAN GRID) */
+    .mango-page { background: #ffffff; padding: 100px 5%; }
+    .section-title { font-size: 50px; font-weight: 900; color: #1a0a00; margin-bottom: 50px; text-align: center; opacity: 0; transform: translateY(40px); transition: all 1s ease-out; }
+    .section-title.visible { opacity: 1; transform: translateY(0); }
+    .section-title span { color: #f4a909; }
+
+    .mango-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; max-width: 1100px; margin: 0 auto; width: 100%; }
+    
+    .sleek-card {
+      background: #fff; border-radius: 24px; padding: 25px 20px; text-align: center;
+      border: 1px solid #f0f0f0; box-shadow: 0 10px 30px rgba(0,0,0,0.02); position: relative;
+      opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .sleek-card.visible { opacity: 1; transform: translateY(0); }
+    .sleek-card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px rgba(244, 169, 9, 0.1); border-color: #f4a909; }
+    
+    .sleek-card img { width: 100%; max-width: 200px; height: 200px; object-fit: contain; mix-blend-mode: multiply; transition: 0.4s; }
+    .sleek-card:hover img { transform: scale(1.08) rotate(3deg); }
+    
+    .sleek-badge {
+      position: absolute; top: 20px; right: 20px;
+      background: #fffdf5; color: #d32f2f; border: 1px solid #ffcdd2;
+      padding: 6px 14px; border-radius: 30px; font-size: 15px; font-weight: 900;
+    }
+
+    .sleek-buy-btn {
+      width: 100%; background: #fff; color: #431700; border: 2px solid #f4a909;
+      padding: 12px; border-radius: 14px; font-size: 18px; font-weight: 900; cursor: pointer;
+      margin-top: 15px; transition: 0.3s;
+    }
+    .sleek-buy-btn:hover { background: #f4a909; color: #fff; transform: translateY(-3px); }
+    .sleek-buy-btn:active { transform: scale(0.95); }
 
     /* PAGE 3: FEATURES */
-    .features-page { background: #fff; padding: 100px 0; overflow: hidden; }
-    .feature-card { background: #fffdf8; border: 2px solid #ffeeba; border-radius: 20px; padding: 40px 30px; text-align: center; transition: all 0.4s ease; box-shadow: 0 10px 30px rgba(0,0,0,0.05); width: 350px; pointer-events: none; }
-    .feature-card:hover { transform: translateY(-15px); box-shadow: 0 20px 40px rgba(244, 169, 9, 0.2); border-color: #f4a909; }
+    .features-page { background: #fafafa; padding: 100px 0; overflow: hidden; border-top: 1px solid #eee; }
+    .features-page .section-title { padding: 0 5%; }
+    .drag-scroll { display: flex; gap: 40px; width: 100%; overflow-x: auto; padding: 20px 5%; scroll-behavior: auto; -webkit-overflow-scrolling: touch; cursor: grab; }
+    .drag-scroll::-webkit-scrollbar { display: none; }
+    .drag-item { flex: 0 0 auto; user-select: none; }
+    
+    .feature-card { background: #fff; border-radius: 24px; padding: 40px 30px; text-align: center; transition: all 0.4s ease; width: 350px; opacity: 0; transform: translateY(40px); border: 1px solid #eee; box-shadow: 0 10px 30px rgba(0,0,0,0.02); }
+    .feature-card.visible { opacity: 1; transform: translateY(0); pointer-events: all; }
     .f-icon { font-size: 60px; margin-bottom: 20px; display: inline-block; animation: floatIcon 3s infinite ease-in-out alternate; }
     @keyframes floatIcon { 0% { transform: translateY(0); } 100% { transform: translateY(-10px); } }
-    .feature-card h3 { font-size: 26px; color: #3d1805; margin-bottom: 15px; font-weight: 900; }
-    .feature-card p { font-size: 18px; color: #555; line-height: 1.6; }
+    .feature-card h3 { font-size: 24px; color: #1a0a00; margin-bottom: 15px; font-weight: 900; }
+    .feature-card p { font-size: 16px; color: #666; line-height: 1.6; }
 
     /* PAGE 4: TESTIMONIALS */
-    .testi-page { background: #fdf5e0; padding: 100px 0; overflow: hidden; position: relative; }
-    .testi-card { background: #fff; width: 400px; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border-left: 5px solid #f4a909; pointer-events: none; }
-    .stars { color: #f4a909; font-size: 22px; margin-bottom: 15px; }
-    .testi-text { font-size: 20px; color: #444; font-style: italic; margin-bottom: 20px; line-height: 1.5; }
-    .customer { font-weight: 900; color: #3d1805; font-size: 18px; }
+    .testi-page { background: #ffffff; padding: 100px 0; overflow: hidden; position: relative; }
+    .testi-page .section-title { padding: 0 5%; }
+    .testi-card { background: #fff; width: 400px; padding: 35px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-left: 5px solid #f4a909; border-top: 1px solid #eee; opacity: 0; transform: translateY(40px); transition: all 0.6s ease-out; }
+    .testi-card.visible { opacity: 1; transform: translateY(0); pointer-events: all; }
+    .stars { color: #f4a909; font-size: 22px; margin-bottom: 15px; letter-spacing: 2px; }
+    .testi-text { font-size: 18px; color: #444; font-style: italic; margin-bottom: 20px; line-height: 1.6; }
+    .customer { font-weight: 900; color: #1a0a00; font-size: 16px; }
 
     /* FOOTER SECTION */
-    footer { background: #1a0a00; color: #fff; padding: 80px 5% 40px; position: relative; overflow: hidden; }
-    footer::before { content: ""; position: absolute; top: -50px; left: -50px; width: 200px; height: 200px; background: #f4a909; filter: blur(100px); opacity: 0.2; pointer-events: none; }
+    footer { background: #0a0400; color: #fff; padding: 80px 5% 40px; position: relative; overflow: hidden; min-height: unset; scroll-snap-align: end; }
+    footer::before { content: ""; position: absolute; top: -50px; left: -50px; width: 200px; height: 200px; background: #f4a909; filter: blur(100px); opacity: 0.15; pointer-events: none; }
     .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 50px; max-width: 1200px; margin: 0 auto; margin-bottom: 50px; }
     .footer-col h3 { font-size: 28px; font-family: "Poppins", sans-serif; color: #f4a909; margin-bottom: 25px; font-weight: 900; }
-    .footer-col p { font-size: 18px; line-height: 1.8; color: #bbb; margin-bottom: 15px; display: flex; align-items: flex-start; gap: 10px; }
-    .footer-col a { color: #bbb; text-decoration: none; transition: 0.3s; display: block; margin-bottom: 10px; font-size: 18px; }
-    .footer-col a:hover { color: #f4a909; padding-left: 10px; }
-    .footer-bottom { text-align: center; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); color: #777; font-size: 18px; font-weight: 800; }
+    .footer-col p { font-size: 16px; line-height: 1.8; color: #bbb; margin-bottom: 15px; display: flex; align-items: flex-start; gap: 10px; }
+    .footer-bottom { text-align: center; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.05); color: #666; font-size: 16px; font-weight: 800; }
     .footer-bottom span { color: #f4a909; animation: heartbeat 1.5s infinite; display: inline-block; }
     @keyframes heartbeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.3); } }
 
     /* DYNAMIC CHECKOUT MODAL */
-    .checkout-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); z-index: 2000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: 0.4s; padding: 20px; }
+    .checkout-modal { position: fixed; inset: 0; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(15px); z-index: 2000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: 0.4s; padding: 20px; }
     .checkout-modal.active { opacity: 1; pointer-events: all; }
-    .modal-content { width: 100%; max-width: 1000px; height: 90vh; background: #fff; border-radius: 30px; overflow: hidden; display: flex; box-shadow: 0 25px 50px rgba(0,0,0,0.5); transform: translateY(50px) scale(0.95); transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    .modal-content { width: 100%; max-width: 900px; height: 85vh; background: #fff; border-radius: 30px; overflow: hidden; display: flex; box-shadow: 0 30px 60px rgba(0,0,0,0.1); border: 1px solid #eee; transform: translateY(50px) scale(0.95); transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
     .checkout-modal.active .modal-content { transform: translateY(0) scale(1); }
     
-    .modal-left { flex: 1; background: url("juicy_mango_bg.png") center/cover no-repeat; position: relative; display: flex; flex-direction: column; justify-content: flex-end; padding: 50px; color: #fff; }
-    .modal-left::before { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 60%); }
-    .modal-left h2 { position: relative; z-index: 2; font-size: 55px; font-weight: 900; text-shadow: 0 5px 15px rgba(0,0,0,0.5); margin-bottom: 10px; }
-    .mango-type-label { position: relative; z-index: 2; font-size: 26px; font-weight: 800; color: #ffd431; }
+    .modal-left { flex: 1; background: #fafafa; position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px; text-align: center; border-right: 1px solid #eee; }
+    .modal-left img { width: 250px; height: 250px; object-fit: contain; margin-bottom: 20px; mix-blend-mode: multiply; }
+    .modal-left h2 { font-size: 45px; font-weight: 900; color: #1a0a00; margin-bottom: 10px; }
+    .mango-type-label { font-size: 20px; font-weight: 800; color: #e06000; }
 
-    .modal-right { flex: 1.2; background: #fffaf0; padding: 40px 50px; display: flex; flex-direction: column; overflow-y: auto; position: relative; }
-    .close-btn { position: absolute; top: 20px; right: 20px; font-size: 30px; cursor: pointer; color: #555; background: #eee; border-radius: 50%; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; z-index: 10; transition: 0.3s; }
-    .close-btn:hover { background: #ff5722; color: #fff; transform: rotate(90deg); }
+    .modal-right { flex: 1.2; background: #fff; padding: 40px; display: flex; flex-direction: column; overflow-y: auto; position: relative; }
+    .close-btn { position: absolute; top: 20px; right: 20px; font-size: 24px; cursor: pointer; color: #999; background: #f5f5f5; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+    .close-btn:hover { background: #ffebee; color: #d32f2f; transform: rotate(90deg); }
 
-    .form-title { font-size: 32px; font-weight: 900; color: #4a1604; margin-bottom: 25px; }
-    .package-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 30px; }
-    .package-card { background: #fff; border: 2px solid #e0e0e0; border-radius: 15px; padding: 15px 10px; text-align: center; cursor: pointer; transition: 0.3s; }
-    .package-card img { width: 60px; height: 60px; object-fit: contain; margin-bottom: 10px; }
-    .package-card h4 { font-size: 24px; font-weight: 900; color: #333; }
-    .package-card.selected { border-color: #f4a909; background: #fffdf5; box-shadow: 0 8px 20px rgba(244, 169, 9, 0.2); transform: translateY(-5px); }
+    .form-title { font-size: 26px; font-weight: 900; color: #1a0a00; margin-bottom: 20px; }
+    .package-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 25px; }
+    .package-card { background: #fafafa; border: 2px solid transparent; border-radius: 12px; padding: 15px 10px; text-align: center; cursor: pointer; transition: 0.3s; }
+    .package-card h4 { font-size: 20px; font-weight: 900; color: #333; }
+    .package-card.selected { border-color: #f4a909; background: #fff; box-shadow: 0 10px 20px rgba(244, 169, 9, 0.1); }
 
-    .input-group { margin-bottom: 20px; }
-    .input-group label { display: block; font-size: 18px; font-weight: 800; color: #555; margin-bottom: 8px; }
-    .input-group input, .input-group textarea { width: 100%; padding: 18px; border: 2px solid #e0e0e0; border-radius: 12px; font-family: inherit; font-size: 18px; transition: 0.3s; background: #fff; }
-    .input-group input:focus, .input-group textarea:focus { outline: none; border-color: #f4a909; box-shadow: 0 0 0 5px rgba(244, 169, 9, 0.1); }
+    .input-group { margin-bottom: 15px; }
+    .input-group label { display: block; font-size: 15px; font-weight: 800; color: #777; margin-bottom: 5px; }
+    .input-group input, .input-group textarea { width: 100%; padding: 15px; border: 2px solid #eee; border-radius: 10px; font-family: inherit; font-size: 16px; transition: 0.3s; background: #fcfcfc; }
+    .input-group input:focus, .input-group textarea:focus { outline: none; border-color: #f4a909; background: #fff; }
 
-    .billing-section { background: #fff; padding: 25px; border-radius: 15px; margin-bottom: 25px; border: 2px dashed #d4a373; }
-    .bill-row { display: flex; justify-content: space-between; font-size: 20px; font-weight: 700; color: #555; margin-bottom: 12px; }
-    .bill-row.total { font-size: 28px; font-weight: 900; color: #d32f2f; border-top: 2px solid #eee; padding-top: 15px; margin-top: 15px; }
+    .billing-section { background: #fafafa; padding: 20px; border-radius: 12px; margin-bottom: 20px; }
+    .bill-row { display: flex; justify-content: space-between; font-size: 16px; font-weight: 700; color: #555; margin-bottom: 10px; }
+    .bill-row.total { font-size: 22px; font-weight: 900; color: #d32f2f; border-top: 2px dashed #ddd; padding-top: 15px; margin-top: 10px; }
 
-    .confirm-btn { background: linear-gradient(90deg, #f4a909, #ff5722); color: #fff; width: 100%; padding: 22px; border: none; border-radius: 15px; font-size: 26px; font-weight: 900; font-family: inherit; cursor: pointer; box-shadow: 0 15px 30px rgba(244, 169, 9, 0.3); transition: 0.3s; }
-    .confirm-btn:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(244, 169, 9, 0.5); }
-    .confirm-btn:active { transform: scale(0.95); }
+    .confirm-btn { background: #1a0a00; color: #fff; width: 100%; padding: 18px; border: none; border-radius: 12px; font-size: 20px; font-weight: 900; font-family: inherit; cursor: pointer; transition: 0.3s; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+    .confirm-btn:hover { background: #f4a909; transform: translateY(-3px); box-shadow: 0 15px 30px rgba(244, 169, 9, 0.3); }
 
-    /* Success Screen */
     .success-overlay { position: absolute; inset: 0; background: #fff; z-index: 50; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: 0.5s; text-align: center; padding: 30px; }
     .success-overlay.active { opacity: 1; pointer-events: all; }
-    .success-icon { font-size: 100px; color: #4caf50; margin-bottom: 20px; animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-    @keyframes popIn { 0% { transform: scale(0); } 100% { transform: scale(1); } }
-
-    .admin-link { position: fixed; bottom: 20px; right: 20px; background: rgba(0,0,0,0.8); color: #fff; padding: 12px 25px; border-radius: 30px; text-decoration: none; font-weight: bold; z-index: 100; backdrop-filter: blur(5px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); transition: 0.3s; border: 1px solid rgba(255,255,255,0.2); }
-    .admin-link:hover { background: #f4a909; color: #333; transform: translateY(-5px); }
+    .success-icon { font-size: 80px; color: #4caf50; margin-bottom: 15px; }
 
     /* =========================================================
        📱 ULTIMATE MOBILE RESPONSIVENESS OVERHAUL
        ========================================================= */
     @media (max-width: 900px) {
-      .hero { padding-top: 100px; }
-      .hero-content { margin-top: -2vh; } /* Pushing text even higher on mobile */
+      section { height: auto; min-height: 100vh; padding: 80px 5% 40px; }
       
-      /* Header & Glassmorphism Hamburger */
-      header { padding: 0 20px; height: 80px; background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); }
-      .menu-btn { display: block; }
+      header { padding: 0 20px; height: 75px; }
+      .logo { font-size: 28px; }
+      .menu-btn { display: block; font-size: 30px; }
+      
       nav {
         position: fixed; top: 0; right: -100%; width: 280px; height: 100vh;
-        background: rgba(255,255,255,0.3); backdrop-filter: blur(35px); -webkit-backdrop-filter: blur(35px);
+        background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(35px); -webkit-backdrop-filter: blur(35px);
         flex-direction: column; align-items: flex-start; padding: 100px 40px;
         box-shadow: -10px 0 30px rgba(0,0,0,0.1); transition: 0.4s ease;
       }
       nav.active { right: 0; }
-      nav a { font-size: 20px; border-bottom: 1px solid rgba(0,0,0,0.1); width: 100%; padding-bottom: 15px; text-shadow: 0 1px 5px rgba(255,255,255,0.5); }
+      nav a { font-size: 18px; border-bottom: 1px solid rgba(0,0,0,0.05); width: 100%; padding-bottom: 15px; }
 
-      h1 { font-size: 45px; letter-spacing: 0; }
-      .desc { font-size: 18px; }
-
-      .section-title { font-size: 35px; margin-bottom: 30px; padding: 0 20px; }
-      .mango-page, .features-page, .testi-page { padding: 60px 0; }
+      /* Mobile Hero Fix (Stacked) */
+      .hero { padding-top: 120px; align-items: flex-start; }
+      .hero-container { flex-direction: column; text-align: center; }
+      .hero-content { margin-bottom: 30px; max-width: 100%; }
+      .hero-bg-text { font-size: 45vw; top: 30%; }
+      .eyebrow { font-size: 14px; padding: 4px 12px; margin-bottom: 10px; }
+      .main-title { font-size: 38px; }
+      .hero-desc { font-size: 16px; margin: 15px auto 0; }
+      .hero-image-wrapper img { max-width: 300px; height: 300px; }
       
-      /* Mobile Mango Grid (2 Columns, 3 Rows) */
-      .mango-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 0 10px; }
-      .cartoon-item img { width: 140px; height: 140px; }
-      .name-tag-wrapper { top: 10px; left: 55%; transform: scale(0.85); }
-      .order-btn { font-size: 16px; padding: 10px; width: 100%; border-radius: 12px; }
+      /* Mango Grid Mobile Fix (2 columns, Breathable) */
+      .mango-page { padding-top: 100px; }
+      .section-title { font-size: 32px; margin-bottom: 30px; }
+      .mango-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+      .sleek-card { padding: 15px 10px; border-radius: 16px; }
+      .sleek-card img { height: 110px; max-width: 100%; margin-bottom: 5px; }
+      .sleek-badge { top: 10px; right: 10px; font-size: 12px; padding: 3px 8px; }
+      .sleek-buy-btn { font-size: 14px; padding: 8px; margin-top: 5px; border-radius: 8px; }
 
-      .drag-scroll { gap: 30px; padding: 10px 20px; }
-      .feature-card { width: 300px; padding: 30px 20px; }
-      .testi-card { width: 320px; padding: 25px; }
+      .feature-card { width: 280px; padding: 30px 20px; }
+      .testi-card { width: 300px; padding: 25px 20px; }
 
-      footer { padding: 60px 20px 30px; }
-      .footer-col h3 { font-size: 24px; }
-      .footer-col p { font-size: 16px; }
-
-      .modal-content { flex-direction: column; height: 95vh; border-radius: 20px; overflow-y: auto; }
-      .modal-left { flex: none; height: 200px; padding: 30px 20px; }
-      .modal-left h2 { font-size: 38px; }
-      .modal-right { padding: 25px 20px; }
-      .package-card h4 { font-size: 18px; }
+      .modal-content { flex-direction: column; height: 95vh; border-radius: 20px; }
+      .modal-left { flex: none; height: 250px; padding: 20px; }
+      .modal-left img { height: 120px; width: 120px; margin-bottom: 10px; }
+      .modal-left h2 { font-size: 32px; }
+      .modal-right { padding: 20px; }
+      .package-card h4 { font-size: 16px; padding: 10px; }
     }
   </style>
 </head>
@@ -233,122 +263,122 @@
   <header id="mainHeader">
     <div class="logo">Mango<span>King</span></div>
     <nav id="navMenu">
-      <a href="#" onclick="closeMenu()">হোম</a>
+      <a href="#hero" onclick="closeMenu()">হোম</a>
       <a href="#collection" onclick="closeMenu()">আমসমূহ</a>
       <a href="#features" onclick="closeMenu()">বৈশিষ্ট্য</a>
       <a href="#footer" onclick="closeMenu()">যোগাযোগ</a>
+      <a href="admin.html" style="color:#d32f2f;">লগ ইন (Admin)</a>
     </nav>
     <div class="menu-btn" onclick="toggleMenu()">☰</div>
   </header>
 
-  <!-- HERO SECTION -->
-  <section class="hero">
-    <div class="fun-mango" style="top: 20%; right: 15%;">🥭</div>
-    <div class="fun-mango" style="bottom: 30%; left: 10%; font-size: 50px; animation-duration: 6s;">🥭</div>
-    <div class="hero-content">
-      <div class="text-box reveal-target">
+  <!-- HERO SECTION (FIXED LAYOUT) -->
+  <section class="hero" id="hero">
+    <div class="hero-bg-text">MANGO<br>KING</div>
+    <div class="hero-container">
+      <div class="hero-content">
         <div class="eyebrow">✔ ১০০% ফরমালিন মুক্ত</div>
-        <h1>
-          তাজা ও মিষ্টি
-          <span>রাজশাহীর আম</span>
-        </h1>
-        <p class="desc">
-          প্রিমিয়াম কোয়ালিটির গাছপাকা আম এখন আপনার হাতের মুঠোয়। আজই আপনার পছন্দের আমটি অর্ডার করুন এবং স্বাদ নিন প্রকৃতির আসল মিষ্টির।
-        </p>
+        <h1 class="main-title">তাজা ও মিষ্টি<br><span>রাজশাহীর সেরা আম</span></h1>
+        <p class="hero-desc">প্রিমিয়াম কোয়ালিটির গাছপাকা আম এখন আপনার হাতের মুঠোয়। আজই আপনার পছন্দের আমটি অর্ডার করুন এবং স্বাদ নিন প্রকৃতির আসল মিষ্টির।</p>
+      </div>
+      <div class="hero-image-wrapper">
+        <img src="mango_amrapali.png" alt="Premium Mango">
       </div>
     </div>
-    <div class="bottom-wave"></div>
   </section>
 
-  <!-- PAGE 2: MANGO COLLECTION (2-Column Mobile Grid) -->
+  <!-- PAGE 2: MANGO COLLECTION (Breathable Grid) -->
   <section id="collection" class="mango-page">
     <h2 class="section-title reveal-target">আমাদের <span>আম</span> কালেকশন</h2>
     <div class="mango-grid">
-      <!-- Item 1: Langra -->
-      <div class="cartoon-item reveal-target">
+      <div class="sleek-card reveal-target" style="transition-delay: 0.1s">
+        <div class="sleek-badge">ল্যাংড়া</div>
         <img src="mango_langra.png" alt="Langra">
-        <div class="shadow-oval"></div>
-        <div class="name-tag-wrapper"><div class="string"></div><div class="name-tag">ল্যাংড়া</div></div>
-        <button class="order-btn" onclick="openModal('ল্যাংড়া', 'mango_langra.png')">আমাকে অর্ডার করুন</button>
+        <button class="sleek-buy-btn" onclick="openModal('ল্যাংড়া', 'mango_langra.png')">🛒 কিনুন</button>
       </div>
-      <!-- Item 2: Himsagar -->
-      <div class="cartoon-item reveal-target" style="transition-delay: 0.1s">
+      <div class="sleek-card reveal-target" style="transition-delay: 0.2s">
+        <div class="sleek-badge">হিমসাগর</div>
         <img src="mango_himsagar.png" alt="Himsagar">
-        <div class="shadow-oval"></div>
-        <div class="name-tag-wrapper"><div class="string"></div><div class="name-tag">হিমসাগর</div></div>
-        <button class="order-btn" onclick="openModal('হিমসাগর', 'mango_himsagar.png')">আমাকে অর্ডার করুন</button>
+        <button class="sleek-buy-btn" onclick="openModal('হিমসাগর', 'mango_himsagar.png')">🛒 কিনুন</button>
       </div>
-      <!-- Item 3: Amrapali -->
-      <div class="cartoon-item reveal-target" style="transition-delay: 0.2s">
+      <div class="sleek-card reveal-target" style="transition-delay: 0.3s">
+        <div class="sleek-badge">আম্রপালি</div>
         <img src="mango_amrapali.png" alt="Amrapali">
-        <div class="shadow-oval"></div>
-        <div class="name-tag-wrapper"><div class="string"></div><div class="name-tag">আম্রপালি</div></div>
-        <button class="order-btn" onclick="openModal('আম্রপালি', 'mango_amrapali.png')">আমাকে অর্ডার করুন</button>
+        <button class="sleek-buy-btn" onclick="openModal('আম্রপালি', 'mango_amrapali.png')">🛒 কিনুন</button>
       </div>
-      <!-- Item 4: Gopalbhog -->
-      <div class="cartoon-item reveal-target" style="transition-delay: 0.3s">
+      <div class="sleek-card reveal-target" style="transition-delay: 0.4s">
+        <div class="sleek-badge">গোপালভোগ</div>
         <img src="mango_gopalbhog.png" alt="Gopalbhog">
-        <div class="shadow-oval"></div>
-        <div class="name-tag-wrapper"><div class="string"></div><div class="name-tag">গোপালভোগ</div></div>
-        <button class="order-btn" onclick="openModal('গোপালভোগ', 'mango_gopalbhog.png')">আমাকে অর্ডার করুন</button>
+        <button class="sleek-buy-btn" onclick="openModal('গোপালভোগ', 'mango_gopalbhog.png')">🛒 কিনুন</button>
       </div>
-      <!-- Item 5: Fazli -->
-      <div class="cartoon-item reveal-target" style="transition-delay: 0.4s">
+      <div class="sleek-card reveal-target" style="transition-delay: 0.5s">
+        <div class="sleek-badge">ফজলি</div>
         <img src="mango_fazli.png" alt="Fazli">
-        <div class="shadow-oval"></div>
-        <div class="name-tag-wrapper"><div class="string"></div><div class="name-tag">ফজলি</div></div>
-        <button class="order-btn" onclick="openModal('ফজলি', 'mango_fazli.png')">আমাকে অর্ডার করুন</button>
+        <button class="sleek-buy-btn" onclick="openModal('ফজলি', 'mango_fazli.png')">🛒 কিনুন</button>
       </div>
-      <!-- Item 6: Bombai -->
-      <div class="cartoon-item reveal-target" style="transition-delay: 0.5s">
+      <div class="sleek-card reveal-target" style="transition-delay: 0.6s">
+        <div class="sleek-badge">বোম্বাই</div>
         <img src="mango_bombai.png" alt="Bombai">
-        <div class="shadow-oval"></div>
-        <div class="name-tag-wrapper"><div class="string"></div><div class="name-tag">বোম্বাই</div></div>
-        <button class="order-btn" onclick="openModal('বোম্বাই', 'mango_bombai.png')">আমাকে অর্ডার করুন</button>
+        <button class="sleek-buy-btn" onclick="openModal('বোম্বাই', 'mango_bombai.png')">🛒 কিনুন</button>
       </div>
     </div>
   </section>
 
-  <!-- PAGE 3: FEATURES (Auto Scroll + Touch Drag) -->
+  <!-- PAGE 3: FEATURES -->
   <section id="features" class="features-page">
     <h2 class="section-title reveal-target">কেন আমরা <span>সেরা?</span></h2>
     <div class="drag-scroll" id="featureScroller">
-      <div class="drag-item feature-card">
+      <div class="drag-item feature-card reveal-target">
         <div class="f-icon">🚫</div>
         <h3>১০০% ফরমালিন মুক্ত</h3>
-        <p>আমাদের আমগুলো কোনো প্রকার ক্ষতিকারক কেমিক্যাল বা ফরমালিন ছাড়াই সম্পূর্ণ প্রাকৃতিকভাবে পাকানো হয়।</p>
+        <p>আমাদের আমগুলো কোনো প্রকার ক্ষতিকারক কেমিক্যাল ছাড়াই সম্পূর্ণ প্রাকৃতিকভাবে পাকানো হয়।</p>
       </div>
-      <div class="drag-item feature-card">
+      <div class="drag-item feature-card reveal-target" style="transition-delay: 0.2s">
         <div class="f-icon">🌳</div>
         <h3>সরাসরি বাগান থেকে</h3>
-        <p>রাজশাহীর নিজস্ব বিখ্যাত বাগানগুলো থেকে সেরা মানের আম বেছে সরাসরি আপনার ঠিকানায় পৌঁছে দেওয়া হয়।</p>
+        <p>রাজশাহীর নিজস্ব বিখ্যাত বাগানগুলো থেকে সেরা মানের আম বেছে সরাসরি আপনার ঠিকানায় দেওয়া হয়।</p>
       </div>
-      <div class="drag-item feature-card">
+      <div class="drag-item feature-card reveal-target" style="transition-delay: 0.4s">
         <div class="f-icon">💵</div>
         <h3>ক্যাশ অন ডেলিভারি</h3>
-        <p>আগে আম হাতে পাবেন, কোয়ালিটি চেক করবেন, এরপর মূল্য পরিশোধ করবেন। কোনো অগ্রিম পেমেন্টের ঝামেলা নেই!</p>
+        <p>আগে আম হাতে পাবেন, কোয়ালিটি চেক করবেন, এরপর মূল্য পরিশোধ করবেন।</p>
       </div>
     </div>
   </section>
 
-  <!-- PAGE 4: TESTIMONIALS (Auto Scroll + Touch Drag) -->
+  <!-- PAGE 4: TESTIMONIALS -->
   <section class="testi-page">
     <h2 class="section-title reveal-target">গ্রাহকদের <span>মতামত</span></h2>
     <div class="drag-scroll" id="testiScroller">
-      <div class="drag-item testi-card">
+      <div class="drag-item testi-card reveal-target">
         <div class="stars">★★★★★</div>
-        <p class="testi-text">"এত সুন্দর মিষ্টি এবং ফ্রেশ আম আমি এর আগে অনলাইনে পাইনি। প্যাকিংও ছিল অসাধারণ। ১০০% রেকমেন্ডেড!"</p>
+        <p class="testi-text">"এত সুন্দর মিষ্টি এবং ফ্রেশ আম আমি এর আগে অনলাইনে পাইনি। ১০০% রেকমেন্ডেড!"</p>
         <p class="customer">— মোঃ শফিকুল ইসলাম, ঢাকা</p>
       </div>
-      <div class="drag-item testi-card">
+      <div class="drag-item testi-card reveal-target" style="transition-delay: 0.2s">
         <div class="stars">★★★★★</div>
-        <p class="testi-text">"আম রূপালি আমের সাইজ এবং স্বাদ একদম পারফেক্ট। ফরমালিন মুক্ত হওয়ায় নিশ্চিন্তে বাচ্চাদের খাওয়াতে পারছি।"</p>
+        <p class="testi-text">"আম রূপালি আমের সাইজ এবং স্বাদ একদম পারফেক্ট। নিশ্চিন্তে বাচ্চাদের খাওয়াতে পারছি।"</p>
         <p class="customer">— সুমাইয়া রহমান, চট্টগ্রাম</p>
       </div>
-      <div class="drag-item testi-card">
+      <div class="drag-item testi-card reveal-target" style="transition-delay: 0.4s">
         <div class="stars">★★★★★</div>
-        <p class="testi-text">"অর্ডার করার ২ দিনের মাথায় ডেলিভারি পেয়েছি। ফজলি আমগুলো সত্যিই অনেক বড় এবং সুস্বাদু ছিল। ধন্যবাদ ম্যাংগো কিং!"</p>
+        <p class="testi-text">"ফজলি আমগুলো সত্যিই অনেক বড় এবং সুস্বাদু ছিল। ধন্যবাদ ম্যাংগো কিং!"</p>
         <p class="customer">— রাশেদ খান, সিলেট</p>
+      </div>
+      <div class="drag-item testi-card reveal-target" style="transition-delay: 0.6s">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"অসাধারণ প্যাকিং এবং দ্রুত ডেলিভারি। আমের স্বাদও খুব ভালো। আমি আবার অর্ডার করবো।"</p>
+        <p class="customer">— সাব্বির আহমেদ, রাজশাহী</p>
+      </div>
+      <div class="drag-item testi-card reveal-target" style="transition-delay: 0.8s">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"খুব ভয়ে ছিলাম অনলাইনে আম অর্ডার করতে। কিন্তু আপনাদের সার্ভিস দেখে মুগ্ধ। একদম ফ্রেশ আম পেয়েছি।"</p>
+        <p class="customer">— নুসরাত জাহান, খুলনা</p>
+      </div>
+      <div class="drag-item testi-card reveal-target" style="transition-delay: 1.0s">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"আমগুলো সাইজে বেশ বড় এবং মিষ্টি। দাম অনুযায়ী কোয়ালিটি অনেক ভালো। ধন্যবাদ।"</p>
+        <p class="customer">— কামরুল হাসান, রংপুর</p>
       </div>
     </div>
   </section>
@@ -358,11 +388,11 @@
     <div class="footer-grid">
       <div class="footer-col">
         <h3>MangoKing</h3>
-        <p style="color:#ddd;">বাংলাদেশের অন্যতম সেরা ও বিশ্বস্ত প্রিমিয়াম অনলাইন আম শপ। আমরা দিচ্ছি ১০০% ফরমালিন মুক্ত গাছপাকা আমের গ্যারান্টি।</p>
+        <p>বাংলাদেশের অন্যতম সেরা প্রিমিয়াম অনলাইন আম শপ। দিচ্ছি ১০০% ফরমালিন মুক্ত গ্যারান্টি।</p>
       </div>
       <div class="footer-col">
         <h3 style="color:#fff;">যোগাযোগ</h3>
-        <p>📍 <span>বিনোদপুর অফিস, রাজশাহী বিশ্ববিদ্যালয় সংলগ্ন, রাজশাহী, বাংলাদেশ।</span></p>
+        <p>📍 <span>বিনোদপুর অফিস, রাজশাহী বিশ্ববিদ্যালয় সংলগ্ন।</span></p>
         <p>📞 <span>০১৩১০৮৮৭২৪১</span></p>
         <p>✉️ <span>support@mangoking.com</span></p>
       </div>
@@ -374,10 +404,10 @@
 
   <!-- CHECKOUT MODAL -->
   <div class="checkout-modal" id="checkoutModal">
-    <!-- Modal content remains exactly the same logic -->
     <div class="modal-content">
       <div class="close-btn" onclick="closeModal()">✕</div>
       <div class="modal-left">
+        <img id="modalImg" src="mango_amrapali.png" alt="Mango">
         <h2 id="modalMangoName">আম রূপালি</h2>
         <div class="mango-type-label">তাজা ও রসালো</div>
       </div>
@@ -385,15 +415,12 @@
         <div class="form-title">অর্ডার কনফার্ম করুন</div>
         <div class="package-grid">
           <div class="package-card" onclick="selectPackage(2, this)">
-            <img id="pkgImg2" src="" alt="Mango">
             <h4>২ কেজি</h4>
           </div>
           <div class="package-card selected" onclick="selectPackage(5, this)">
-            <img id="pkgImg5" src="" alt="Mango">
             <h4>৫ কেজি</h4>
           </div>
           <div class="package-card" onclick="selectPackage(10, this)">
-            <img id="pkgImg10" src="" alt="Mango">
             <h4>১০ কেজি</h4>
           </div>
         </div>
@@ -406,8 +433,8 @@
           <input type="tel" id="custPhone" placeholder="017........" required>
         </div>
         <div class="input-group">
-          <label>পূর্ণাঙ্গ ঠিকানা</label>
-          <textarea id="custAddress" rows="2" placeholder="বাড়ি নং, রাস্তা, এলাকা..." required></textarea>
+          <label>ঠিকানা</label>
+          <textarea id="custAddress" rows="2" placeholder="বাড়ি নং, এলাকা..." required></textarea>
         </div>
         <div class="billing-section">
           <div class="bill-row">
@@ -424,34 +451,37 @@
           </div>
         </div>
         <button class="confirm-btn" onclick="submitOrder()">অর্ডার কনফার্ম করুন</button>
+        
         <div class="success-overlay" id="successOverlay">
           <div class="success-icon">✔</div>
-          <h2 style="color: #4caf50; margin-bottom: 10px;">অর্ডার সম্পন্ন হয়েছে!</h2>
-          <p style="color: #666; font-size: 18px; text-align: center;">আপনার অর্ডারটি আমাদের এডমিন ড্যাশবোর্ডে চলে গেছে।<br>খুব জলদি আমরা কল করে কনফার্ম করবো।</p>
-          <button class="confirm-btn" style="margin-top: 30px; font-size: 20px; padding: 15px;" onclick="closeModal()">বন্ধ করুন</button>
+          <h2 style="color: #1a0a00;">অর্ডার সম্পন্ন হয়েছে!</h2>
+          <p style="color: #666; margin: 15px 0;">খুব জলদি আমরা কল করে কনফার্ম করবো।</p>
+          <button class="confirm-btn" onclick="closeModal()">বন্ধ করুন</button>
         </div>
       </div>
     </div>
   </div>
 
-  <a href="admin.html" class="admin-link">⚙️ এডমিন প্যানেল</a>
-
   <script>
-    // MOBILE MENU LOGIC
+    // MOBILE MENU
     function toggleMenu() { document.getElementById('navMenu').classList.toggle('active'); }
     function closeMenu() { document.getElementById('navMenu').classList.remove('active'); }
 
-    // HEADER SCROLL
+    // HEADER BLUR SCROLL
     window.addEventListener('scroll', () => {
       const header = document.getElementById('mainHeader');
-      if(window.scrollY > 50) header.classList.add('scrolled');
+      if(window.scrollY > 10) header.classList.add('scrolled');
       else header.classList.remove('scrolled');
     });
 
-    // SCROLL REVEAL MAGIC
+    // SCROLL REVEAL (Snapping Animations)
     const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('visible'); });
-    }, { threshold: 0.15 });
+      entries.forEach(entry => { 
+        if(entry.isIntersecting) {
+          entry.target.classList.add('visible'); 
+        }
+      });
+    }, { threshold: 0.2 });
     document.querySelectorAll('.reveal-target').forEach(el => observer.observe(el));
 
     // LEAVES ANIMATION
@@ -468,56 +498,71 @@
       container.appendChild(leaf);
       setTimeout(() => leaf.remove(), 12000);
     }
-    setInterval(spawnLeaf, 1000);
+    setInterval(spawnLeaf, 1500);
 
-    // AUTO-SCROLL + DRAG ENGINE FOR FEATURES & TESTIMONIALS ONLY
+    // PERFECT INFINITE SEAMLESS SCROLL FOR FEATURES & TESTIMONIALS
     function setupDragScroll(selector, speed) {
       const slider = document.querySelector(selector);
       if(!slider) return;
-      
-      let isDown = false, startX, scrollLeft, autoScrollInterval;
+      let isDown = false, startX, scrollLeft;
 
-      const items = Array.from(slider.children);
-      items.forEach(item => slider.appendChild(item.cloneNode(true)));
-      items.forEach(item => slider.appendChild(item.cloneNode(true)));
+      // Clone items to make 5 identical sets (guarantees massive overflow & no vacant space)
+      const originalItems = Array.from(slider.children);
+      for(let i=0; i<4; i++) {
+        originalItems.forEach(item => {
+           const clone = item.cloneNode(true);
+           slider.appendChild(clone);
+           observer.observe(clone); // FIX: Make sure the cloned items are observed so they don't remain invisible!
+        });
+      }
 
-      function autoScroll() {
-        if(!isDown) {
-          slider.scrollLeft += speed;
-          if(slider.scrollLeft >= slider.scrollWidth / 2) {
-            slider.scrollLeft = 0;
-          }
+      function tick() {
+        if(!isDown) { slider.scrollLeft += speed; }
+        
+        const oneSet = slider.scrollWidth / 5;
+        
+        // Seamless infinite loop magic: When it moves past the middle, jump back invisibly!
+        if(slider.scrollLeft >= oneSet * 2) {
+          slider.scrollLeft -= oneSet;
+          if(isDown) scrollLeft -= oneSet; // Keep drag smooth
+        } else if(slider.scrollLeft <= 0) {
+          slider.scrollLeft += oneSet;
+          if(isDown) scrollLeft += oneSet; // Keep drag smooth
         }
-        autoScrollInterval = requestAnimationFrame(autoScroll);
+        
+        requestAnimationFrame(tick);
       }
       
-      autoScroll();
-
-      function pauseScroll() { isDown = true; cancelAnimationFrame(autoScrollInterval); }
-      function resumeScroll() { isDown = false; autoScroll(); }
+      // Start slightly shifted so user can immediately drag backwards if they want
+      setTimeout(() => { 
+        slider.scrollLeft = slider.scrollWidth / 5; 
+        tick(); 
+      }, 100);
 
       slider.addEventListener('mousedown', (e) => {
-        pauseScroll(); slider.classList.add('active');
+        isDown = true; slider.classList.add('active');
         startX = e.pageX - slider.offsetLeft; scrollLeft = slider.scrollLeft;
       });
-      slider.addEventListener('mouseleave', () => { slider.classList.remove('active'); resumeScroll(); });
-      slider.addEventListener('mouseup', () => { slider.classList.remove('active'); resumeScroll(); });
+      slider.addEventListener('mouseleave', () => { isDown = false; slider.classList.remove('active'); });
+      slider.addEventListener('mouseup', () => { isDown = false; slider.classList.remove('active'); });
       slider.addEventListener('mousemove', (e) => {
         if(!isDown) return; e.preventDefault();
         const x = e.pageX - slider.offsetLeft; slider.scrollLeft = scrollLeft - (x - startX) * 2;
       });
 
       slider.addEventListener('touchstart', (e) => {
-        pauseScroll(); startX = e.touches[0].pageX - slider.offsetLeft; scrollLeft = slider.scrollLeft;
+        isDown = true; startX = e.touches[0].pageX - slider.offsetLeft; scrollLeft = slider.scrollLeft;
       }, {passive: true});
-      slider.addEventListener('touchend', resumeScroll);
+      slider.addEventListener('touchend', () => { isDown = false; });
       slider.addEventListener('touchmove', (e) => {
-        if(!isDown) return; const x = e.touches[0].pageX - slider.offsetLeft; slider.scrollLeft = scrollLeft - (x - startX) * 2;
+        if(!isDown) return; 
+        const x = e.touches[0].pageX - slider.offsetLeft; slider.scrollLeft = scrollLeft - (x - startX) * 2;
       }, {passive: true});
     }
 
-    setupDragScroll('#featureScroller', 0.8);
-    setupDragScroll('#testiScroller', 1.5);
+    // Low speed, infinite seamless flow
+    setupDragScroll('#featureScroller', 0.5);
+    setupDragScroll('#testiScroller', 0.7);
 
     // CHECKOUT LOGIC
     let currentMango = ''; let currentKg = 5; const pricePerKg = 300; const deliveryCharge = 100; let totalBillAmount = 1600;
@@ -525,9 +570,7 @@
     function openModal(mangoName, imgFile) {
       currentMango = mangoName;
       document.getElementById('modalMangoName').innerText = mangoName;
-      document.getElementById('pkgImg2').src = imgFile;
-      document.getElementById('pkgImg5').src = imgFile;
-      document.getElementById('pkgImg10').src = imgFile;
+      document.getElementById('modalImg').src = imgFile;
       document.getElementById('successOverlay').classList.remove('active');
       selectPackage(5, document.querySelectorAll('.package-card')[1]);
       document.getElementById('checkoutModal').classList.add('active');
