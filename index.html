@@ -19,14 +19,13 @@
 
     ::-webkit-scrollbar { width: 0; display: none; }
 
-    /* DRAG & SCROLL CONTINUOUS CONTAINER */
+    /* DRAG & SCROLL CONTINUOUS CONTAINER (For Features & Testimonials) */
     .drag-scroll {
       display: flex; gap: 80px; width: 100%; overflow-x: auto; padding: 20px 0;
       scroll-behavior: auto; -webkit-overflow-scrolling: touch; cursor: grab;
     }
     .drag-scroll.active { cursor: grabbing; }
     .drag-scroll::-webkit-scrollbar { display: none; }
-    
     .drag-item { flex: 0 0 auto; user-select: none; }
 
     /* GLASSMORPHISM HEADER & MOBILE MENU */
@@ -62,9 +61,9 @@
     @keyframes floatMango { 0% { transform: translateY(0) rotate(0deg); } 100% { transform: translateY(-30px) rotate(20deg); } }
 
     /* HERO SECTION */
-    .hero { background: url("sharp_bg.png") center/cover no-repeat; height: 100vh; display: flex; align-items: center; justify-content: flex-start; padding-top: 5vh; position: relative; }
+    .hero { background: url("sharp_bg.png") center/cover no-repeat; height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding-top: 130px; position: relative; }
     .hero::before { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(255,206,52,.9), rgba(0,0,0,.2)); z-index: 1; }
-    .hero-content { position: relative; z-index: 5; padding: 0 5%; width: 100%; }
+    .hero-content { position: relative; z-index: 5; padding: 0 5%; width: 100%; margin-top: 5vh; }
 
     .text-box { max-width: 800px; opacity: 0; transform: translateY(30px); transition: all 1s ease-out; position: relative; }
     .text-box.visible { opacity: 1; transform: translateY(0); }
@@ -76,35 +75,37 @@
 
     .bottom-wave { position: absolute; left: 0; bottom: -2px; width: 100%; height: 150px; background: linear-gradient(180deg, transparent, #fffdf8); z-index: 6; }
 
-    /* PAGE 2: MANGO COLLECTION */
-    .mango-page { background: #fffdf8; background-image: radial-gradient(#ffdf80 1px, transparent 1px); background-size: 40px 40px; padding: 100px 0; overflow: hidden; }
+    /* PAGE 2: MANGO COLLECTION (GRID LAYOUT) */
+    .mango-page { background: #fffdf8; background-image: radial-gradient(#ffdf80 1px, transparent 1px); background-size: 40px 40px; padding: 100px 5%; overflow: hidden; }
     .section-title { font-size: 50px; font-weight: 900; color: #3d1805; margin-bottom: 60px; text-align: center; opacity: 0; transform: translateY(40px); transition: all 1s ease-out; }
     .section-title.visible { opacity: 1; transform: translateY(0); }
     .section-title span { color: #e06000; }
 
-    .cartoon-item { display: flex; flex-direction: column; align-items: center; position: relative; width: 300px; }
+    .mango-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 50px; max-width: 1200px; margin: 0 auto; }
+    
+    .cartoon-item { display: flex; flex-direction: column; align-items: center; position: relative; width: 100%; opacity: 0; transform: translateY(50px); transition: all 0.8s ease-out; }
+    .cartoon-item.visible { opacity: 1; transform: translateY(0); }
     .cartoon-item img { width: 260px; height: 260px; object-fit: contain; mix-blend-mode: multiply; pointer-events: none; transform-origin: bottom center; z-index: 5; }
     .cartoon-item:hover img { animation: dance 0.6s ease-in-out infinite alternate; }
-    @keyframes dance { 0% { transform: scale(1) translateY(0) rotate(0deg); } 33% { transform: scale(1.1, 0.9) translateY(10px) rotate(-10deg); } 66% { transform: scale(0.9, 1.1) translateY(-15px) rotate(10deg); } 100% { transform: scale(1.05, 0.95) translateY(0) rotate(-5deg); } }
 
-    .shadow-oval { width: 150px; height: 20px; background: rgba(0,0,0,0.1); border-radius: 50%; margin-top: -30px; filter: blur(5px); margin-bottom: 30px; pointer-events: none; }
+    .shadow-oval { width: 60%; height: 20px; background: rgba(0,0,0,0.1); border-radius: 50%; margin-top: -30px; filter: blur(5px); margin-bottom: 30px; pointer-events: none; }
 
     .name-tag-wrapper { position: absolute; top: 15px; left: 65%; transform-origin: top center; animation: swingTag 4s ease-in-out infinite alternate; z-index: 10; display: flex; flex-direction: column; align-items: center; pointer-events: none; }
     .cartoon-item:nth-child(even) .name-tag-wrapper { animation: swingTag 5s ease-in-out infinite alternate-reverse; }
-    .string { width: 4px; height: 70px; background: linear-gradient(180deg, #d32f2f, #b71c1c); box-shadow: 1px 1px 3px rgba(0,0,0,0.3); border-radius: 2px; }
-    .name-tag { background: #fffdf5; padding: 8px 22px; border-radius: 8px; border: 2px solid #d32f2f; font-size: 20px; font-weight: 900; color: #3d1805; box-shadow: 0 5px 15px rgba(0,0,0,0.25); margin-top: -5px; position: relative; }
-    .name-tag::before { content: ""; position: absolute; top: 4px; left: 50%; transform: translateX(-50%); width: 8px; height: 8px; background: #d32f2f; border-radius: 50%; }
+    .string { width: 3px; height: 50px; background: linear-gradient(180deg, #d32f2f, #b71c1c); box-shadow: 1px 1px 3px rgba(0,0,0,0.3); border-radius: 2px; }
+    .name-tag { background: #fffdf5; padding: 6px 18px; border-radius: 8px; border: 2px solid #d32f2f; font-size: 18px; font-weight: 900; color: #3d1805; box-shadow: 0 5px 15px rgba(0,0,0,0.25); margin-top: -5px; position: relative; white-space: nowrap; }
+    .name-tag::before { content: ""; position: absolute; top: 4px; left: 50%; transform: translateX(-50%); width: 6px; height: 6px; background: #d32f2f; border-radius: 50%; }
     @keyframes swingTag { 0% { transform: rotate(-12deg); } 100% { transform: rotate(12deg); } }
 
     .order-btn {
-      background: linear-gradient(90deg, #4a1604, #661f06); color: #ffd431; padding: 16px 40px; border-radius: 50px;
-      font-family: inherit; font-size: 22px; font-weight: 900; border: none; cursor: pointer;
-      box-shadow: 0 12px 25px rgba(74, 22, 4, 0.3); transition: .2s cubic-bezier(0.175, 0.885, 0.32, 1.275); margin-top: 20px; z-index: 10; position: relative;
+      background: linear-gradient(90deg, #4a1604, #661f06); color: #ffd431; padding: 15px 30px; border-radius: 50px;
+      font-family: inherit; font-size: 20px; font-weight: 900; border: none; cursor: pointer;
+      box-shadow: 0 10px 20px rgba(74, 22, 4, 0.3); transition: .2s cubic-bezier(0.175, 0.885, 0.32, 1.275); margin-top: 10px; z-index: 10; position: relative; width: 90%;
     }
-    .order-btn:hover { transform: translateY(-5px) scale(1.05); box-shadow: 0 18px 35px rgba(74, 22, 4, 0.5); }
-    .order-btn:active { transform: scale(0.9); /* Squish animation */ }
+    .order-btn:hover { transform: translateY(-5px) scale(1.05); box-shadow: 0 15px 30px rgba(74, 22, 4, 0.5); }
+    .order-btn:active { transform: scale(0.9); }
 
-    /* PAGE 3: FEATURES (Why Choose Us) */
+    /* PAGE 3: FEATURES */
     .features-page { background: #fff; padding: 100px 0; overflow: hidden; }
     .feature-card { background: #fffdf8; border: 2px solid #ffeeba; border-radius: 20px; padding: 40px 30px; text-align: center; transition: all 0.4s ease; box-shadow: 0 10px 30px rgba(0,0,0,0.05); width: 350px; pointer-events: none; }
     .feature-card:hover { transform: translateY(-15px); box-shadow: 0 20px 40px rgba(244, 169, 9, 0.2); border-color: #f4a909; }
@@ -181,6 +182,7 @@
        ========================================================= */
     @media (max-width: 900px) {
       .hero { padding-top: 100px; }
+      .hero-content { margin-top: -2vh; } /* Pushing text even higher on mobile */
       
       /* Header & Glassmorphism Hamburger */
       header { padding: 0 20px; height: 80px; background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); }
@@ -200,12 +202,13 @@
       .section-title { font-size: 35px; margin-bottom: 30px; padding: 0 20px; }
       .mango-page, .features-page, .testi-page { padding: 60px 0; }
       
+      /* Mobile Mango Grid (2 Columns, 3 Rows) */
+      .mango-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 0 10px; }
+      .cartoon-item img { width: 140px; height: 140px; }
+      .name-tag-wrapper { top: 10px; left: 55%; transform: scale(0.85); }
+      .order-btn { font-size: 16px; padding: 10px; width: 100%; border-radius: 12px; }
+
       .drag-scroll { gap: 30px; padding: 10px 20px; }
-      .cartoon-item { width: 280px; }
-      .cartoon-item img { width: 220px; height: 220px; }
-      .name-tag-wrapper { top: 30px; left: 60%; }
-      .order-btn { font-size: 20px; padding: 15px 35px; }
-      
       .feature-card { width: 300px; padding: 30px 20px; }
       .testi-card { width: 320px; padding: 25px; }
 
@@ -257,27 +260,51 @@
     <div class="bottom-wave"></div>
   </section>
 
-  <!-- PAGE 2: MANGO COLLECTION (Auto Scroll + Touch Drag) -->
+  <!-- PAGE 2: MANGO COLLECTION (2-Column Mobile Grid) -->
   <section id="collection" class="mango-page">
     <h2 class="section-title reveal-target">আমাদের <span>আম</span> কালেকশন</h2>
-    <div class="drag-scroll" id="mangoScroller">
-      <div class="drag-item cartoon-item">
-        <img src="cartoon_amrapali.png" alt="Amrapali">
-        <div class="shadow-oval"></div>
-        <div class="name-tag-wrapper"><div class="string"></div><div class="name-tag">আম রূপালি</div></div>
-        <button class="order-btn" onclick="openModal('আম রূপালি', 'cartoon_amrapali.png')">আমাকে অর্ডার করুন</button>
-      </div>
-      <div class="drag-item cartoon-item">
-        <img src="cartoon_fazli.png" alt="Fazli">
-        <div class="shadow-oval"></div>
-        <div class="name-tag-wrapper"><div class="string"></div><div class="name-tag">ফজলি</div></div>
-        <button class="order-btn" onclick="openModal('ফজলি', 'cartoon_fazli.png')">আমাকে অর্ডার করুন</button>
-      </div>
-      <div class="drag-item cartoon-item">
-        <img src="cartoon_langra.png" alt="Langra">
+    <div class="mango-grid">
+      <!-- Item 1: Langra -->
+      <div class="cartoon-item reveal-target">
+        <img src="mango_langra.png" alt="Langra">
         <div class="shadow-oval"></div>
         <div class="name-tag-wrapper"><div class="string"></div><div class="name-tag">ল্যাংড়া</div></div>
-        <button class="order-btn" onclick="openModal('ল্যাংড়া', 'cartoon_langra.png')">আমাকে অর্ডার করুন</button>
+        <button class="order-btn" onclick="openModal('ল্যাংড়া', 'mango_langra.png')">আমাকে অর্ডার করুন</button>
+      </div>
+      <!-- Item 2: Himsagar -->
+      <div class="cartoon-item reveal-target" style="transition-delay: 0.1s">
+        <img src="mango_himsagar.png" alt="Himsagar">
+        <div class="shadow-oval"></div>
+        <div class="name-tag-wrapper"><div class="string"></div><div class="name-tag">হিমসাগর</div></div>
+        <button class="order-btn" onclick="openModal('হিমসাগর', 'mango_himsagar.png')">আমাকে অর্ডার করুন</button>
+      </div>
+      <!-- Item 3: Amrapali -->
+      <div class="cartoon-item reveal-target" style="transition-delay: 0.2s">
+        <img src="mango_amrapali.png" alt="Amrapali">
+        <div class="shadow-oval"></div>
+        <div class="name-tag-wrapper"><div class="string"></div><div class="name-tag">আম্রপালি</div></div>
+        <button class="order-btn" onclick="openModal('আম্রপালি', 'mango_amrapali.png')">আমাকে অর্ডার করুন</button>
+      </div>
+      <!-- Item 4: Gopalbhog -->
+      <div class="cartoon-item reveal-target" style="transition-delay: 0.3s">
+        <img src="mango_gopalbhog.png" alt="Gopalbhog">
+        <div class="shadow-oval"></div>
+        <div class="name-tag-wrapper"><div class="string"></div><div class="name-tag">গোপালভোগ</div></div>
+        <button class="order-btn" onclick="openModal('গোপালভোগ', 'mango_gopalbhog.png')">আমাকে অর্ডার করুন</button>
+      </div>
+      <!-- Item 5: Fazli -->
+      <div class="cartoon-item reveal-target" style="transition-delay: 0.4s">
+        <img src="mango_fazli.png" alt="Fazli">
+        <div class="shadow-oval"></div>
+        <div class="name-tag-wrapper"><div class="string"></div><div class="name-tag">ফজলি</div></div>
+        <button class="order-btn" onclick="openModal('ফজলি', 'mango_fazli.png')">আমাকে অর্ডার করুন</button>
+      </div>
+      <!-- Item 6: Bombai -->
+      <div class="cartoon-item reveal-target" style="transition-delay: 0.5s">
+        <img src="mango_bombai.png" alt="Bombai">
+        <div class="shadow-oval"></div>
+        <div class="name-tag-wrapper"><div class="string"></div><div class="name-tag">বোম্বাই</div></div>
+        <button class="order-btn" onclick="openModal('বোম্বাই', 'mango_bombai.png')">আমাকে অর্ডার করুন</button>
       </div>
     </div>
   </section>
@@ -358,15 +385,15 @@
         <div class="form-title">অর্ডার কনফার্ম করুন</div>
         <div class="package-grid">
           <div class="package-card" onclick="selectPackage(2, this)">
-            <img id="pkgImg2" src="cartoon_amrapali.png" alt="Mango">
+            <img id="pkgImg2" src="" alt="Mango">
             <h4>২ কেজি</h4>
           </div>
           <div class="package-card selected" onclick="selectPackage(5, this)">
-            <img id="pkgImg5" src="cartoon_amrapali.png" alt="Mango">
+            <img id="pkgImg5" src="" alt="Mango">
             <h4>৫ কেজি</h4>
           </div>
           <div class="package-card" onclick="selectPackage(10, this)">
-            <img id="pkgImg10" src="cartoon_amrapali.png" alt="Mango">
+            <img id="pkgImg10" src="" alt="Mango">
             <h4>১০ কেজি</h4>
           </div>
         </div>
@@ -443,14 +470,13 @@
     }
     setInterval(spawnLeaf, 1000);
 
-    // AUTO-SCROLL + DRAG ENGINE FOR ALL 3 SECTIONS
+    // AUTO-SCROLL + DRAG ENGINE FOR FEATURES & TESTIMONIALS ONLY
     function setupDragScroll(selector, speed) {
       const slider = document.querySelector(selector);
       if(!slider) return;
       
       let isDown = false, startX, scrollLeft, autoScrollInterval;
 
-      // Duplicate items to make it look infinite
       const items = Array.from(slider.children);
       items.forEach(item => slider.appendChild(item.cloneNode(true)));
       items.forEach(item => slider.appendChild(item.cloneNode(true)));
@@ -458,7 +484,6 @@
       function autoScroll() {
         if(!isDown) {
           slider.scrollLeft += speed;
-          // Soft reset to create infinite loop illusion
           if(slider.scrollLeft >= slider.scrollWidth / 2) {
             slider.scrollLeft = 0;
           }
@@ -471,38 +496,26 @@
       function pauseScroll() { isDown = true; cancelAnimationFrame(autoScrollInterval); }
       function resumeScroll() { isDown = false; autoScroll(); }
 
-      // Mouse Events
       slider.addEventListener('mousedown', (e) => {
-        pauseScroll();
-        slider.classList.add('active');
-        startX = e.pageX - slider.offsetLeft;
-        scrollLeft = slider.scrollLeft;
+        pauseScroll(); slider.classList.add('active');
+        startX = e.pageX - slider.offsetLeft; scrollLeft = slider.scrollLeft;
       });
       slider.addEventListener('mouseleave', () => { slider.classList.remove('active'); resumeScroll(); });
       slider.addEventListener('mouseup', () => { slider.classList.remove('active'); resumeScroll(); });
       slider.addEventListener('mousemove', (e) => {
-        if(!isDown) return;
-        e.preventDefault();
-        const x = e.pageX - slider.offsetLeft;
-        slider.scrollLeft = scrollLeft - (x - startX) * 2;
+        if(!isDown) return; e.preventDefault();
+        const x = e.pageX - slider.offsetLeft; slider.scrollLeft = scrollLeft - (x - startX) * 2;
       });
 
-      // Touch Events
       slider.addEventListener('touchstart', (e) => {
-        pauseScroll();
-        startX = e.touches[0].pageX - slider.offsetLeft;
-        scrollLeft = slider.scrollLeft;
+        pauseScroll(); startX = e.touches[0].pageX - slider.offsetLeft; scrollLeft = slider.scrollLeft;
       }, {passive: true});
       slider.addEventListener('touchend', resumeScroll);
       slider.addEventListener('touchmove', (e) => {
-        if(!isDown) return;
-        const x = e.touches[0].pageX - slider.offsetLeft;
-        slider.scrollLeft = scrollLeft - (x - startX) * 2;
+        if(!isDown) return; const x = e.touches[0].pageX - slider.offsetLeft; slider.scrollLeft = scrollLeft - (x - startX) * 2;
       }, {passive: true});
     }
 
-    // Initialize the scrollers (Speed: 1px per frame)
-    setupDragScroll('#mangoScroller', 1.2);
     setupDragScroll('#featureScroller', 0.8);
     setupDragScroll('#testiScroller', 1.5);
 
